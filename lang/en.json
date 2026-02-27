@@ -1,0 +1,19 @@
+{
+  "echoes-of-history": {
+    "settings": {
+      "enabled": {
+        "name": "Enable module",
+        "hint": "Enables/disables this module’s UI integration."
+      }
+    },
+    "keybindings": {
+      "doThing": {
+        "name": "Run action",
+        "hint": "Test action: shows a notification."
+      }
+    },
+    "controls": {
+      "ping": "Echoes: Ping"
+    }
+  }
+}

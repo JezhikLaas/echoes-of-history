@@ -28,7 +28,7 @@ Perfect for groups that play every few weeks and need a quick, atmospheric refre
 1. In Foundry VTT, go to **Setup → Add-on Modules → Install Module**
 2. Paste the following URL into the **Manifest URL** field:
  
-[https://github.com/JezhikLaas/echoes-of-history/releases/latest/download/module.json](https://github.com/YOUR_GITHUB_USER/echoes-of-history/releases/latest/download/module.json)
+[https://github.com/JezhikLaas/echoes-of-history/releases/latest/download/module.json](https://github.com/JezhikLaas/echoes-of-history/releases/latest/download/module.json)
 ## Usage
 
 To use Echoes of History, follow these steps:

@@ -1,5 +1,3 @@
-import type { MODULE_ID } from "./constants";
-
 declare global {
     namespace ClientSettings {
         interface Values {
@@ -10,6 +8,7 @@ declare global {
 
                 recapSections: string;
                 recapSlideMs: number;
+                repeatPauseMs: number;
             };
         }
     }

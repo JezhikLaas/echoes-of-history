@@ -43,4 +43,15 @@ export function registerSettings(): void {
         type: Number,
         default: 6000
     });
+
+    // --- Recap: Repeat-Pause ---
+
+    settings.register(MODULE_ID, "repeatPauseMs", {
+        name: "Recap: Repeat-Pause (ms)",
+        hint: "Wie lange vor der Wiederholung gewartet wird (z.B. 10000).",
+        scope: "world",
+        config: true,
+        type: Number,
+        default: 10000
+    });
 }

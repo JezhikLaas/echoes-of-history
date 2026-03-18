@@ -168,9 +168,11 @@ export const recapApi = {
         }
 
         const slideMs = Number(settings.get(MODULE_ID, "recapSlideMs") ?? 6000);
+        const pauseMs = Number(settings.get(MODULE_ID, "repeatPauseMs") ?? 10000);
 
         isRunning = true;
         localIndex = 0;
+        let isFollowUp = false;
 
         // Overlay einblenden (Canvas faded weg), noch kein Text
         setOverlayContent({ bodyHtml: "", hint: "" });
@@ -178,28 +180,34 @@ export const recapApi = {
         await waitForOverlayFadeIn();
         if (!isRunning) return;
 
-        const tick = async (): Promise<void> => {
-            if (!isRunning) return;
-
-            // Ab dem zweiten Slide: erst fade out
-            if (localIndex > 0) {
-                await fadeOutBody();
+            const tick = async (): Promise<void> => {
                 if (!isRunning) return;
-            }
 
-            setOverlayContent({
-                bodyHtml: formatSlideAsHtml(list, localIndex),
-                hint: "Klick zum Schließen"
-            });
-            fadeInBody();
+                let waitTime = slideMs;
 
-            localIndex += 1;
-            if (localIndex >= list.length) {
-                localIndex = 0;
-            }
+                if (localIndex > 0 || isFollowUp) {
+                    await fadeOutBody();
+                    if (!isRunning) return;
+                }
 
-            slideTimer = window.setTimeout(tick, Math.max(250, slideMs));
-        };
+                setOverlayContent({
+                    bodyHtml: formatSlideAsHtml(list, localIndex),
+                    hint: "Klick zum Schließen"
+                });
+
+                requestAnimationFrame(() => {
+                    fadeInBody();
+                });
+
+                localIndex += 1;
+                if (localIndex >= list.length) {
+                    isFollowUp = true;
+                    localIndex = 0;
+                    waitTime = pauseMs;
+                }
+
+                slideTimer = window.setTimeout(tick, Math.max(250, waitTime));
+            };
 
         tick();
     },

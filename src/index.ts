@@ -17,7 +17,7 @@ Hooks.once("init", () => {
     if (!g.RECAP_ECHOES) {
         g.RECAP_ECHOES = {
             recap: recapApi,
-            version: "0.1.0",
+            version: "0.2.0",
             moduleId: MODULE_ID
         };
     } else {

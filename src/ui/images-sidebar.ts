@@ -119,6 +119,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     broadcastShow(path: string) {
+        console.log(`Broadcasting image show: ${path}`);
         game.socket?.emit(SOCKET_NAME, { action: "showImage", path });
         const overlay = document.getElementById("cine-show-overlay");
         const img = document.getElementById("cine-show-image") as HTMLImageElement;

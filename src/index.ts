@@ -47,6 +47,7 @@ Hooks.once("ready", () => {
         overlay.classList.remove("active");
 
         if (game.user?.isGM) {
+            console.log("GM clicked to hide image");
             game.socket?.emit(SOCKET_NAME, { action: "hideImage" });
         }
     });

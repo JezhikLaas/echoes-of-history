@@ -45,6 +45,7 @@ Hooks.once("ready", () => {
 
     overlay.addEventListener("click", () => {
         overlay.classList.remove("active");
+        overlay.classList.add("hiding");
 
         if (game.user?.isGM) {
             console.log("GM clicked to hide image");

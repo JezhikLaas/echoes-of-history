@@ -2,7 +2,8 @@
   "id": "echoes-of-history",
   "title": "Echoes of History",
   "description": "A cinematic 'Previously on…' recap slideshow for Foundry VTT.",
-  "version": "0.2.0",
+  "version": "0.3.2",
+  "socket": true,
   "authors": [
     {
       "name": "JezhikLaas"

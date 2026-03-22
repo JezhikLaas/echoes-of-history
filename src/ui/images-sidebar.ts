@@ -1,4 +1,4 @@
-import { MODULE_ID } from "../constants";
+import {MODULE_ID, SOCKET_NAME} from "../constants";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -119,7 +119,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     broadcastShow(path: string) {
-        game.socket?.emit(`module.${MODULE_ID}`, { action: "showImage", path });
+        game.socket?.emit(SOCKET_NAME, { action: "showImage", path });
         const overlay = document.getElementById("cine-show-overlay");
         const img = document.getElementById("cine-show-image") as HTMLImageElement;
         if (overlay && img) {

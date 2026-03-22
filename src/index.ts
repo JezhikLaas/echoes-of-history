@@ -51,14 +51,23 @@ Hooks.once("ready", () => {
         }
     });
 
+    console.log(`${MODULE_ID} | Socket Listener wird registriert auf: ${SOCKET_NAME}`);
+
     game.socket?.on(SOCKET_NAME, (data: any) => {
         const overlayElement = document.getElementById("cine-show-overlay");
         const imgElement = document.getElementById("cine-show-image") as HTMLImageElement;
 
+        console.log("Overlay DOM-Element vorhanden:", !!overlay);
+        console.log("Image DOM-Element vorhanden:", !!imgElement);
+
         if (data.action === "showImage" && overlayElement && imgElement) {
+            console.log("Triggering Show Animation...");
             imgElement.src = data.path;
+            overlay.classList.remove("hiding");
             overlayElement.classList.add("active");
         } else if (data.action === "hideImage" && overlayElement) {
+            console.log("Triggering Hide Animation...");
+            overlay.classList.add("hiding");
             overlayElement.classList.remove("active");
         }
     });

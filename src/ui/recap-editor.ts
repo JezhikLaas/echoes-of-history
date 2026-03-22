@@ -1,5 +1,5 @@
-
 import { MODULE_ID } from "../constants";
+import { info } from "../utils";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -56,7 +56,7 @@ export class RecapEditor extends HandlebarsApplicationMixin(ApplicationV2) {
         const settings = game.settings as any;
         await settings.set(MODULE_ID, "recapSections", JSON.stringify(sections));
 
-        ui.notifications?.info(`[${MODULE_ID}] ${sections.length} Abschnitt(e) gespeichert.`);
+        info("echoes-of-history.recap-editor.sections_saved", { name: MODULE_ID, length: sections.length })
     }
 }
 

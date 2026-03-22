@@ -6,11 +6,11 @@
         "hint": "Enables/disables this module’s UI integration."
       }
     },
-    "keybindings": {
-      "doThing": {
-        "name": "Run action",
-        "hint": "Test action: shows a notification."
-      }
+    "recap": {
+      "no_sections": "[{name}] No recap sections defined (World Setting: recapSections)"
+    },
+    "recap-editor": {
+      "sections_saved": "[{name}] {length} sections(s) saved."
     },
     "controls": {
       "ping": "Echoes: Ping"

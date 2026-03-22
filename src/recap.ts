@@ -1,4 +1,5 @@
 import { MODULE_ID } from "./constants";
+import { warn } from "./utils";
 
 type RecapOptions = {
     title?: string;
@@ -6,10 +7,9 @@ type RecapOptions = {
 };
 
 const OVERLAY_ID = `${MODULE_ID}-recap-overlay`;
-const FADE_MS = 600; // muss zur CSS transition-duration passen
-const OVERLAY_FADE_MS = 800; // Overlay fade (muss zur CSS transition passen)
+const FADE_MS = 600;
+const OVERLAY_FADE_MS = 800;
 
-// Laufzeitstatus pro Client
 let slideTimer: number | null = null;
 let isRunning = false;
 let localIndex = 0;
@@ -138,7 +138,7 @@ export const recapApi = {
 
         const list = sections ?? readSectionsFromSettings();
         if (list.length === 0) {
-            ui.notifications?.warn(`[${MODULE_ID}] Keine Recap-Abschnitte gesetzt.`);
+            warn("echoes-of-history.recap.no_sections", {name: MODULE_ID});
             return;
         }
 
@@ -152,10 +152,6 @@ export const recapApi = {
         openOverlay();
     },
 
-    /**
-     * Startet die Slideshow (Slides nacheinander), immer von vorn.
-     * Guard: wenn bereits laufend/offen => nichts tun.
-     */
     start: async (options?: RecapOptions): Promise<void> => {
         const settings = game.settings as any;
         if (!settings) return;
@@ -163,7 +159,7 @@ export const recapApi = {
 
         const list = readSectionsFromSettings();
         if (list.length === 0) {
-            ui.notifications?.warn(`[${MODULE_ID}] Keine Recap-Abschnitte gesetzt (World Setting: recapSections).`);
+            warn("echoes-of-history.recap.no_sections", {name: MODULE_ID});
             return;
         }
 
@@ -212,9 +208,6 @@ export const recapApi = {
         tick();
     },
 
-    /**
-     * Setzt die Abschnitte persistent als World-Setting (JSON wird intern gespeichert).
-     */
     setSections: async (sections: string[]): Promise<void> => {
         const settings = game.settings as any;
         if (!settings) return;
@@ -222,9 +215,6 @@ export const recapApi = {
         await settings.set(MODULE_ID, "recapSections", JSON.stringify(sections));
     },
 
-    /**
-     * Optional: manuell stoppen/schließen (z.B. Macro).
-     */
     stop: (): void => {
         closeOverlay();
     }

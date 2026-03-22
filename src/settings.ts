@@ -11,8 +11,6 @@ export function registerSettings(): void {
         return;
     }
 
-    // --- Recap: Daten-Setting (nicht im UI sichtbar, intern JSON) ---
-
     settings.register(MODULE_ID, "recapSections", {
         name: "Recap: Abschnitte (intern)",
         hint: "Wird über den Editor verwaltet.",
@@ -21,8 +19,6 @@ export function registerSettings(): void {
         type: String,
         default: "[]"
     });
-
-    // --- Recap: Editor-Button ---
 
     settings.registerMenu(MODULE_ID, "recapEditor", {
         name: "Recap: Abschnitte bearbeiten",
@@ -33,8 +29,6 @@ export function registerSettings(): void {
         restricted: true
     });
 
-    // --- Recap: Slide-Dauer ---
-
     settings.register(MODULE_ID, "recapSlideMs", {
         name: "Recap: Slide-Dauer (ms)",
         hint: "Wie lange jeder Slide angezeigt wird (z.B. 6000).",
@@ -43,8 +37,6 @@ export function registerSettings(): void {
         type: Number,
         default: 6000
     });
-
-    // --- Recap: Repeat-Pause ---
 
     settings.register(MODULE_ID, "repeatPauseMs", {
         name: "Recap: Repeat-Pause (ms)",

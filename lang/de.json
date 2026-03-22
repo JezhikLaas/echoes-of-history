@@ -7,7 +7,8 @@
       }
     },
     "recap": {
-      "no_sections": "[{name}] Keine Recap-Abschnitte gesetzt (World Setting: recapSections)"
+      "no_sections": "[{name}] Keine Recap-Abschnitte gesetzt (World Setting: recapSections)",
+      "hint_close": "Klick zum Schließen"
     },
     "recap-editor": {
       "sections_saved": "[{name}] {length} Abschnitt(e) gespeichert."

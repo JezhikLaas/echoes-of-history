@@ -7,7 +7,8 @@
       }
     },
     "recap": {
-      "no_sections": "[{name}] No recap sections defined (World Setting: recapSections)"
+      "no_sections": "[{name}] No recap sections defined (World Setting: recapSections)",
+      "hint_close": "Click to close"
     },
     "recap-editor": {
       "sections_saved": "[{name}] {length} sections(s) saved."

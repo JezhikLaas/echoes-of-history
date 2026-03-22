@@ -129,9 +129,6 @@ function readSectionsFromSettings(): string[] {
 }
 
 export const recapApi = {
-    /**
-     * Zeigt genau einen Slide (lokaler Index). Startet keine Autoplay-Schleife.
-     */
     show: (sections?: string[], options?: RecapOptions): void => {
         const settings = game.settings as any;
         if (!settings) return;
@@ -144,9 +141,11 @@ export const recapApi = {
 
         if (localIndex < 0 || localIndex >= list.length) localIndex = 0;
 
+        const text = game.i18n?.format("echoes-of-history.recap.hint_close") ?? "Click to close";
+
         setOverlayContent({
             bodyHtml: formatSlideAsHtml(list, localIndex),
-            hint: "Klick zum Schließen"
+            hint: text
         });
 
         openOverlay();
@@ -186,9 +185,11 @@ export const recapApi = {
                     if (!isRunning) return;
                 }
 
+                const text = game.i18n?.format("echoes-of-history.recap.hint_close") ?? "Click to close";
+
                 setOverlayContent({
                     bodyHtml: formatSlideAsHtml(list, localIndex),
-                    hint: "Klick zum Schließen"
+                    hint: text
                 });
 
                 requestAnimationFrame(() => {

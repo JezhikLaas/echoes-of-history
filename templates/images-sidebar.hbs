@@ -1,0 +1,45 @@
+<div class="echoes-of-history-sidebar-wrapper">
+    <div class="echoes-header-breadcrumb">
+        <span class="breadcrumb-text">ECHOES</span>
+    </div>
+
+    <div class="echoes-of-history-container">
+        <header class="directory-header">
+            <div class="header-actions action-buttons flexrow">
+                <button class="create-image" data-action="addImage">
+                    <i class="fas fa-plus"></i> {{localize "echoes-of-history.sidebar.add_image"}}
+                </button>
+            </div>
+        </header>
+
+        <div class="echoes-of-history-sidebar">
+            <ul class="image-list directory-list">
+                {{#each images}}
+                    <li class="image-item directory-item flexrow" data-index="{{@index}}">
+                        <div class="echo-info">
+                            <span class="image-name">{{this.name}}</span>
+                        </div>
+                        <div class="controls flexrow">
+                            <button class="icon-button" data-action="editEcho" data-index="{{@index}}" title="{{localize 'echoes-of-history.sidebar.edit'}}">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            <button class="icon-button" data-action="showImage" data-path="{{this.path}}" title="{{localize 'echoes-of-history.sidebar.show'}}">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="icon-button" data-action="deleteImage" data-index="{{@index}}" title="{{localize 'echoes-of-history.sidebar.remove'}}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+
+        {{#unless images.length}}
+            <div class="empty-state">
+                <i class="fas fa-history"></i>
+                <p>No echoes recorded yet...</p>
+            </div>
+        {{/unless}}
+    </div>
+</div>

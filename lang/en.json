@@ -13,8 +13,11 @@
     "recap-editor": {
       "sections_saved": "[{name}] {length} sections(s) saved."
     },
-    "controls": {
-      "ping": "Echoes: Ping"
+    "sidebar": {
+      "title": "Fade in images",
+      "add_image": "Add image",
+      "show": "Fad in",
+      "remove": "Delete"
     }
   }
 }

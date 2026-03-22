@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "npm" # Prüft deine package.json
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  - package-ecosystem: "github-actions" # Prüft deine Workflows
+    directory: "/"
+    schedule:
+      interval: "monthly"

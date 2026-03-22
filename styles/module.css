@@ -70,3 +70,102 @@
 .eoh-recap-counter {
     display: none;
 }
+
+#cine-show-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 3s ease-in-out, visibility 3s;
+}
+
+#cine-show-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+    cursor: pointer;
+}
+
+#cine-show-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+    border: 1px solid #444;
+    pointer-events: auto;
+}
+
+#echoes-of-history-sidebar.tab {
+    display: none;
+    background: #1a1a1a;
+    color: #f0f0e0;
+    height: 100%;
+    border-left: 1px solid #444;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    overflow: hidden; /* Verhindert hässliche Scrollbars außerhalb des Containers */
+}
+
+#echoes-of-history-sidebar.tab.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.echoes-header-breadcrumb {
+    padding: 10px 15px;
+    background: #111;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.echoes-header-breadcrumb .breadcrumb-text {
+    font-family: "Modesto Condensed", "Signika", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    color: #ff6400; /* Das typische WCB-Orange/Gold */
+    font-weight: bold;
+}
+
+.echoes-header-breadcrumb .breadcrumb-separator {
+    margin: 0 8px;
+    color: #666;
+}
+
+/* Die Inhalts-Area */
+.echoes-of-history-container {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Buttons im WCB-Stil (massiv und flach) */
+#echoes-of-history-sidebar button {
+    background: #2a2a2a;
+    color: #ccc;
+    border: 1px solid #444;
+    border-radius: 0; /* Eckig wirkt technischer */
+    padding: 8px;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+#echoes-of-history-sidebar button:hover {
+    background: #3a3a3a;
+    border-color: #ff6400;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 100, 0, 0.2);
+}

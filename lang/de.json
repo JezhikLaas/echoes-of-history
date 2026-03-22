@@ -13,8 +13,11 @@
     "recap-editor": {
       "sections_saved": "[{name}] {length} Abschnitt(e) gespeichert."
     },
-    "controls": {
-      "ping": "Echoes: Ping"
+    "sidebar": {
+      "title": "Bilder einblenden",
+      "add_image": "Hinzufügen",
+      "show": "Einblenden",
+      "remove": "Löschen"
     }
   }
 }

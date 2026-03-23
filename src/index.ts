@@ -2,11 +2,12 @@ import { MODULE_ID, SOCKET_NAME } from "./constants";
 import { recapApi } from "./recap";
 import { registerSettings } from "./settings";
 import { ImagesSidebar } from "./ui/images-sidebar";
+import {writeLog} from "./utils";
 
 let imagesSidebar: ImagesSidebar | null = null;
 
 Hooks.once("init", () => {
-    console.log(`[${MODULE_ID}] init`);
+    writeLog("start init");
 
     registerSettings();
 
@@ -35,6 +36,8 @@ Hooks.once("init", () => {
         type: Object,
         default: []
     });
+
+    writeLog("init done");
 });
 
 Hooks.once("ready", () => {
@@ -48,33 +51,33 @@ Hooks.once("ready", () => {
         overlay.classList.add("hiding");
 
         if (game.user?.isGM) {
-            console.log("GM clicked to hide image");
+            writeLog("GM clicked to hide image");
             game.socket?.emit(SOCKET_NAME, { action: "hideImage" });
         }
     });
 
-    console.log(`${MODULE_ID} | Socket Listener wird registriert auf: ${SOCKET_NAME}`);
+    writeLog(`Socket Listener wird registriert auf: ${SOCKET_NAME}`);
 
     game.socket?.on(SOCKET_NAME, (data: any) => {
         const overlayElement = document.getElementById("cine-show-overlay");
         const imgElement = document.getElementById("cine-show-image") as HTMLImageElement;
 
-        console.log("Overlay DOM-Element vorhanden:", !!overlay);
-        console.log("Image DOM-Element vorhanden:", !!imgElement);
+        writeLog("Overlay DOM-Element vorhanden:", !!overlay);
+        writeLog("Image DOM-Element vorhanden:", !!imgElement);
 
         if (data.action === "showImage" && overlayElement && imgElement) {
-            console.log("Triggering Show Animation...");
+            writeLog("Triggering Show Animation...");
             imgElement.src = data.path;
             overlay.classList.remove("hiding");
             overlayElement.classList.add("active");
         } else if (data.action === "hideImage" && overlayElement) {
-            console.log("Triggering Hide Animation...");
+            writeLog("Triggering Hide Animation...");
             overlay.classList.add("hiding");
             overlayElement.classList.remove("active");
         }
     });
 
-    console.log(`[${MODULE_ID}] ready`);
+    writeLog("ready");
 });
 
 

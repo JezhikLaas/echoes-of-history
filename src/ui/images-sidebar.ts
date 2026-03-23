@@ -1,4 +1,5 @@
 import {MODULE_ID, SOCKET_NAME} from "../constants";
+import {writeLog} from "../utils";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -107,7 +108,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         const name = path.split("/").pop() || "New Image";
         currentList.push({ name, path });
         await settings.set(MODULE_ID, "imageList", currentList);
-        this.render(true);
+        this.render({ force: true });
     }
 
     private async _deleteImage(index: number) {
@@ -115,16 +116,17 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         const currentList = settings.get(MODULE_ID, "imageList") as any[];
         currentList.splice(index, 1);
         await settings.set(MODULE_ID, "imageList", currentList);
-        this.render(true);
+        this.render({ force: true });
     }
 
     broadcastShow(path: string) {
-        console.log(`Broadcasting image show: ${path}`);
+        writeLog(`Broadcasting image show: ${path}`);
         game.socket?.emit(SOCKET_NAME, { action: "showImage", path });
         const overlay = document.getElementById("cine-show-overlay");
         const img = document.getElementById("cine-show-image") as HTMLImageElement;
         if (overlay && img) {
             img.src = path;
+            overlay.classList.remove("hiding");
             overlay.classList.add("active");
         }
     }

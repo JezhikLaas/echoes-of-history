@@ -85,7 +85,9 @@
     pointer-events: none;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 3s ease-in-out, visibility 3s;
+    --vision-fade-in: 3000ms;
+    --vision-fade-out: 3000ms;
+    transition: opacity var(--vision-fade-in) ease-in-out, visibility var(--vision-fade-in);
 }
 
 #cine-show-overlay.active {

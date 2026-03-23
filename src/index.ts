@@ -6,6 +6,19 @@ import {writeLog} from "./utils";
 
 let imagesSidebar: ImagesSidebar | null = null;
 
+function applyVisionTimings(): void {
+    const settings = game.settings as any;
+    const fadeIn = settings.get(MODULE_ID, "echoDefaultFadeIn") as number;
+    const fadeOut = settings.get(MODULE_ID, "echoDefaultFadeOut") as number;
+
+    const overlay = document.getElementById("cine-show-overlay");
+    if (overlay) {
+        overlay.style.setProperty('--vision-fade-in', `${fadeIn}ms`);
+        overlay.style.setProperty('--vision-fade-out', `${fadeOut}ms`);
+        console.log(`${MODULE_ID} | Vision Timings updated: In ${fadeIn}ms, Out ${fadeOut}ms`);
+    }
+}
+
 Hooks.once("init", () => {
     writeLog("start init");
 
@@ -67,6 +80,12 @@ Hooks.once("ready", () => {
 
         if (data.action === "showImage" && overlayElement && imgElement) {
             writeLog("Triggering Show Animation...");
+
+            const fadeIn = data.fadeIn || 3000;
+            const fadeOut = data.fadeOut || 3000;
+            overlay.style.setProperty('--vision-fade-in', `${fadeIn}ms`);
+            overlay.style.setProperty('--vision-fade-out', `${fadeOut}ms`);
+
             imgElement.src = data.path;
             overlay.classList.remove("hiding");
             overlayElement.classList.add("active");
@@ -77,9 +96,11 @@ Hooks.once("ready", () => {
         }
     });
 
+    applyVisionTimings();
     writeLog("ready");
 });
 
+Hooks.on("closeSettingsConfig", () => applyVisionTimings());
 
 Hooks.on("renderSidebar", (_app: Sidebar, html: HTMLElement, _data: any) => {
     const $html = $(html);

@@ -4,7 +4,17 @@
       "enabled": {
         "name": "Enable module",
         "hint": "Enables/disables this module’s UI integration."
-      }
+      },
+      "recap-editor-name": "Echoes: Edit Sections",
+      "recap-editor-hint": "Opens an editor to manage the recap text sections.",
+      "recap-slidems-name": "Echoes: Slide Duration (ms)",
+      "recap-slidems-hint": "The duration each recap slide is displayed (e.g., 6000).",
+      "recap-repeatms-name": "Echoes: Repeat Pause (ms)",
+      "recap-repeatms-hint": "How long to wait before the recap starts over (e.g., 10000).",
+      "fade-in-name": "Visions: Default Fade-In (ms)",
+      "fade-in-hint": "The time in milliseconds for a vision to fully fade in.",
+      "fade-out-name": "Visions: Default Fade-Out (ms)",
+      "fade-out-hint": "The time in milliseconds for a vision to disappear."
     },
     "recap": {
       "no_sections": "[{name}] No recap sections defined (World Setting: recapSections)",

@@ -24,7 +24,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     };
 
-    static async #onAddImage(this: ImagesSidebar, event: PointerEvent, target: HTMLElement) {
+    static async #onAddImage(this: ImagesSidebar, _event: PointerEvent, _target: HTMLElement) {
         const picker = new (foundry.applications.apps as any).FilePicker({
             type: "image",
             callback: (path: string) => this._addImage(path)
@@ -32,12 +32,12 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         picker.render(true);
     }
 
-    static #onShowImage(this: ImagesSidebar, event: PointerEvent, target: HTMLElement) {
+    static #onShowImage(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
         const path = target.dataset.path;
         if (path) this.broadcastShow(path);
     }
 
-    static #onDeleteImage(this: ImagesSidebar, event: PointerEvent, target: HTMLElement) {
+    static #onDeleteImage(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
         const index = parseInt(target.dataset.index || "0");
         this._deleteImage(index);
     }
@@ -121,7 +121,15 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
 
     broadcastShow(path: string) {
         writeLog(`Broadcasting image show: ${path}`);
-        game.socket?.emit(SOCKET_NAME, { action: "showImage", path });
+        const settings = game.settings as any;
+        game.socket?.emit(
+            SOCKET_NAME,
+            {
+                action: "showImage",
+                path: path,
+                fadeIn: settings.get(MODULE_ID, "echoFadeIn"),
+                fadeOut: settings.get(MODULE_ID, "echoFadeOut")
+            });
         const overlay = document.getElementById("cine-show-overlay");
         const img = document.getElementById("cine-show-image") as HTMLImageElement;
         if (overlay && img) {

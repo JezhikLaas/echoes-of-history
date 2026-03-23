@@ -9,6 +9,8 @@ declare global {
                 recapSections: string;
                 recapSlideMs: number;
                 repeatPauseMs: number;
+                echoFadeIn: number;
+                echoFadeOut: number;
             };
         }
     }

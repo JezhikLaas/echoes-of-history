@@ -4,7 +4,17 @@
       "enabled": {
         "name": "Modul aktivieren",
         "hint": "Aktiviert/deaktiviert die UI-Integration dieses Moduls."
-      }
+      },
+      "recap-editor-name": "Echoes: Abschnitte bearbeiten",
+      "recap-editor-hint": "Öffnet einen Editor für die Recap-Texte.",
+      "recap-slidems-name": "Echoes: Anzeigedauer (ms)",
+      "recap-slidems-hint": "Anzeigedauer eines Slides (z.B. 10000).",
+      "recap-repeatms-name": "Echoes: Repeat-Pause (ms)",
+      "recap-repeatms-hint": "Wie lange vor der Wiederholung gewartet wird (z.B. 10000).",
+      "fade-in-name": "Visions: Standard Fade-In (ms)",
+      "fade-in-hint": "Die Zeit in Millisekunden, die ein Bild benötigt, um vollständig zu erscheinen.",
+      "fade-out-name": "Visions: Standard Fade-Out (ms)",
+      "fade-out-hint": "Die Zeit in Millisekunden, die ein Bild benötigt, um zu verschwinden."
     },
     "recap": {
       "no_sections": "[{name}] Keine Recap-Abschnitte gesetzt (World Setting: recapSections)",

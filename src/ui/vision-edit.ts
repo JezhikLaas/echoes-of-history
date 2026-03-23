@@ -41,7 +41,7 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
         };
     }
 
-    static async #onSave(this: VisionEditDialog, event: Event, target: HTMLElement) {
+    static async #onSave(this: VisionEditDialog, _event: Event, _target: HTMLElement) {
         // Foundry's spezieller Form-Handler
         const form = this.element as HTMLFormElement;
         const FormDataExtended = (foundry.utils as any).FormDataExtended;

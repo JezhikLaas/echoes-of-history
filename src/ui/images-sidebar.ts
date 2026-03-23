@@ -1,6 +1,7 @@
 import { MODULE_ID, SOCKET_NAME } from "../constants";
 import { writeError, writeLog } from "../utils";
 import { VisionEditDialog } from "./vision-edit";
+import {VisionEntry} from "../settings";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -35,15 +36,24 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     static #onShowImage(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
-        const path = target.dataset.path;
-        if (path) this.broadcastShow(path);
+        const row = target.closest(".image-item") as HTMLElement | null;
+        const id = row?.dataset.id;
+        if (id) this.broadcastShow(id);
     }
 
-    static #onDeleteImage(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
+    static async #onDeleteImage(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
         const row = target.closest(".image-item") as HTMLElement | null;
         const id = row?.dataset.id;
         if (id) {
-            this._deleteImage(id); // Wir übergeben die ID statt des Index
+            const confirm = await (foundry.applications.api as any).DialogV2.confirm({
+                window: { title: game.i18n?.localize("echoes-of-history.sidebar.delete-title") },
+                content: `<p>${game.i18n?.localize("echoes-of-history.sidebar.delete-text")}</p>`,
+                rejectClose: false,
+                modal: true
+            });
+            if (confirm) {
+                await this._deleteImage(id); // Wir übergeben die ID statt des Index
+            }
         }
     }
 
@@ -163,19 +173,24 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         await this.render({ force: true });
     }
 
-    broadcastShow(path: string) {
-        writeLog(`Broadcasting image show: ${path}`);
+    broadcastShow(id: string) {
+        writeLog(`Broadcasting image show: ${id}`);
         const settings = game.settings as any;
-        const fadeIn = settings.get(MODULE_ID, "echoFadeIn");
-        const fadeOut = settings.get(MODULE_ID, "echoFadeOut");
+
+        const allImages = settings.get(MODULE_ID, "imageList") as VisionEntry[];
+        const imageData = allImages.find(img => img.id === id);
+        if (!imageData) {
+            writeError(`Image with ID ${id} not found in list`);
+            return;
+        }
 
         game.socket?.emit(
             SOCKET_NAME,
             {
                 action: "showImage",
-                path: path,
-                fadeIn: fadeIn,
-                fadeOut: fadeOut
+                path: imageData.path,
+                fadeIn: imageData.fadeIn,
+                fadeOut: imageData.fadeOut
             });
 
         const overlay = document.getElementById("cine-show-overlay");
@@ -189,10 +204,10 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             return;
         }
 
-        overlay.style.setProperty('--vision-fade-in', `${fadeIn}ms`);
-        overlay.style.setProperty('--vision-fade-out', `${fadeOut}ms`);
+        overlay.style.setProperty('--vision-fade-in', `${imageData.fadeIn}ms`);
+        overlay.style.setProperty('--vision-fade-out', `${imageData.fadeOut}ms`);
 
-        img.src = path;
+        img.src = imageData.path;
         overlay.classList.remove("hiding");
         overlay.classList.add("active");
     }

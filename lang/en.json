@@ -9,12 +9,22 @@
       "recap-editor-hint": "Opens an editor to manage the recap text sections.",
       "recap-slidems-name": "Echoes: Slide Duration (ms)",
       "recap-slidems-hint": "The duration each recap slide is displayed (e.g., 6000).",
-      "recap-repeatms-name": "Echoes: Repeat Pause (ms)",
-      "recap-repeatms-hint": "How long to wait before the recap starts over (e.g., 10000).",
+      "recap-pausems-name": "Echoes: Repeat Pause (ms)",
+      "recap-pausems-hint": "How long to wait before the recap starts over (e.g., 10000).",
       "fade-in-name": "Visions: Default Fade-In (ms)",
       "fade-in-hint": "The time in milliseconds for a vision to fully fade in.",
       "fade-out-name": "Visions: Default Fade-Out (ms)",
-      "fade-out-hint": "The time in milliseconds for a vision to disappear."
+      "fade-out-hint": "The time in milliseconds for a vision to disappear.",
+      "path-label": "File path",
+      "path-hint": "Path to the image to be displayed",
+      "name-label": "Display name",
+      "default-hint": "Default value",
+      "save-button": "Save",
+      "vision-title": "Image specific settings",
+      "recap-title": "Edit sections",
+      "fade-out-label": "Fade-Out (ms)",
+      "fade-in-label": "Fade-in (ms)",
+      "recap-hint": "Divide sections using <strong>empty lines</strong>. Line breaks within a section are preserved."
     },
     "recap": {
       "no_sections": "[{name}] No recap sections defined (World Setting: recapSections)",
@@ -27,7 +37,9 @@
       "title": "Fade in images",
       "add_image": "Add image",
       "show": "Fad in",
-      "remove": "Delete"
+      "remove": "Delete",
+      "delete-title": "Delete image",
+      "delete-text": "Really remove image from the list?"
     }
   }
 }

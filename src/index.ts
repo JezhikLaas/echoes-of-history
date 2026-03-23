@@ -8,8 +8,8 @@ let imagesSidebar: ImagesSidebar | null = null;
 
 function applyVisionTimings(): void {
     const settings = game.settings as any;
-    const fadeIn = settings.get(MODULE_ID, "echoDefaultFadeIn") as number;
-    const fadeOut = settings.get(MODULE_ID, "echoDefaultFadeOut") as number;
+    const fadeIn = settings.get(MODULE_ID, "echoFadeIn") as number;
+    const fadeOut = settings.get(MODULE_ID, "echoFadeOut") as number;
 
     const overlay = document.getElementById("cine-show-overlay");
     if (overlay) {

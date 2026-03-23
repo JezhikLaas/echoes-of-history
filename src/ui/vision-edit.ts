@@ -15,14 +15,14 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
 
     constructor(entry: VisionEntry, onSave: (e: VisionEntry) => void) {
         super();
-        this.entry = { ...entry }; // Kopie, um "Abbrechen" zu ermöglichen
+        this.entry = { ...entry };
         this.onSaveCallback = onSave;
     }
 
     static override DEFAULT_OPTIONS = {
         tag: "form",
         id: "vision-edit-dialog",
-        window: { title: "VISION-EDIT-DIALOG.Title", resizable: false },
+        window: { title: "echoes-of-history.settings.vision-title", resizable: false },
         position: { width: 400 },
         actions: { save: VisionEditDialog.#onSave }
     };
@@ -35,18 +35,16 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
         const settings = game.settings as any;
         return {
             entry: this.entry,
-            // Fallback-Werte aus den globalen Settings anzeigen
-            defaultIn: settings.get(MODULE_ID, "echoDefaultFadeIn"),
-            defaultOut:settings.get(MODULE_ID, "echoDefaultFadeOut")
+            defaultIn: settings.get(MODULE_ID, "echoFadeIn"),
+            defaultOut:settings.get(MODULE_ID, "echoFadeOut")
         };
     }
 
     static async #onSave(this: VisionEditDialog, _event: Event, _target: HTMLElement) {
-        // Foundry's spezieller Form-Handler
         const form = this.element as HTMLFormElement;
-        const FormDataExtended = (foundry.utils as any).FormDataExtended;
-        const formData = new FormDataExtended(form);
-        const data = formData.object; // Hier liegt dein fertiges Objekt!
+        const formData = new FormData(form);
+        const plainData = Object.fromEntries(formData.entries());
+        const data = foundry.utils.expandObject(plainData)as Record<string, any>;
 
         const updated = {
             ...this.entry,

@@ -15,18 +15,13 @@
         <div class="echoes-of-history-sidebar">
             <ul class="image-list directory-list">
                 {{#each images}}
-                {{!-- Wir nutzen die ID als stabilen Anker --}}
                     <li class="image-item directory-item flexrow" data-id="{{this.id}}">
-                        <div class="echo-info">
+                        <div class="echo-info clickable" data-action="showImage" title="{{localize 'echoes-of-history.sidebar.show'}}">
                             <span class="image-name">{{this.name}}</span>
                         </div>
                         <div class="controls flexrow">
-                            {{!-- Die Action-Buttons bleiben schlank --}}
                             <button class="icon-button" data-action="editEcho" title="{{localize 'echoes-of-history.sidebar.edit'}}">
                                 <i class="fas fa-cog"></i>
-                            </button>
-                            <button class="icon-button" data-action="showImage" title="{{localize 'echoes-of-history.sidebar.show'}}">
-                                <i class="fas fa-eye"></i>
                             </button>
                             <button class="icon-button" data-action="deleteImage" title="{{localize 'echoes-of-history.sidebar.remove'}}">
                                 <i class="fas fa-trash"></i>

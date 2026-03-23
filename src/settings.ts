@@ -76,3 +76,10 @@ export interface VisionEntry {
     fadeIn: number;
     fadeOut: number;
 }
+
+export interface FolderEntry {
+    id: string;
+    name: string;
+    parentId: string | null;
+    expanded: boolean;
+}

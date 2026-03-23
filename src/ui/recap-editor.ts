@@ -9,7 +9,7 @@ export class RecapEditor extends HandlebarsApplicationMixin(ApplicationV2) {
         id: `${MODULE_ID}-recap-editor`,
         tag: "form",
         window: {
-            title: "Recap: Abschnitte bearbeiten",
+            title: "echoes-of-history.settings.recap-title",
             resizable: true
         },
         position: {

@@ -1,3 +1,13 @@
+.echo-info.clickable {
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.echo-info.clickable:hover .image-name {
+    color: lightblue;
+    text-shadow: 0 0 5px #666666;
+}
+
 .eoh-recap-overlay {
     position: fixed;
     inset: 0;
@@ -88,6 +98,12 @@
     --vision-fade-in: 3000ms;
     --vision-fade-out: 3000ms;
     transition: opacity var(--vision-fade-in) ease-in-out, visibility var(--vision-fade-in);
+}
+
+#cine-show-overlay.hiding {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--vision-fade-out) ease-in-out, visibility var(--vision-fade-out);
 }
 
 #cine-show-overlay.active {

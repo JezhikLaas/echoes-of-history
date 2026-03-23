@@ -9,12 +9,22 @@
       "recap-editor-hint": "Öffnet einen Editor für die Recap-Texte.",
       "recap-slidems-name": "Echoes: Anzeigedauer (ms)",
       "recap-slidems-hint": "Anzeigedauer eines Slides (z.B. 10000).",
-      "recap-repeatms-name": "Echoes: Repeat-Pause (ms)",
-      "recap-repeatms-hint": "Wie lange vor der Wiederholung gewartet wird (z.B. 10000).",
+      "recap-pausems-name": "Echoes: Repeat-Pause (ms)",
+      "recap-pausems-hint": "Wie lange vor der Wiederholung gewartet wird (z.B. 10000).",
       "fade-in-name": "Visions: Standard Fade-In (ms)",
       "fade-in-hint": "Die Zeit in Millisekunden, die ein Bild benötigt, um vollständig zu erscheinen.",
       "fade-out-name": "Visions: Standard Fade-Out (ms)",
-      "fade-out-hint": "Die Zeit in Millisekunden, die ein Bild benötigt, um zu verschwinden."
+      "fade-out-hint": "Die Zeit in Millisekunden, die ein Bild benötigt, um zu verschwinden.",
+      "path-label": "Dateipfad",
+      "path-hint": "Der Dateipfad zum einem anzuzeigenden Bild.",
+      "name-label": "Anzeigename",
+      "default-hint": "Standardwert",
+      "save-button": "Speichern",
+      "vision-title": "Bild spezifische Einstellungen",
+      "recap-title": "Abschnitte bearbeiten",
+      "fade-out-label": "Ausblenden (ms)",
+      "fade-in-label": "Einblenden (ms)",
+      "recap-hint": "Abschnitte durch eine <strong>Leerzeile</strong> trennen. Zeilenumbrüche innerhalb eines Abschnitts werden übernommen."
     },
     "recap": {
       "no_sections": "[{name}] Keine Recap-Abschnitte gesetzt (World Setting: recapSections)",
@@ -28,7 +38,9 @@
       "add_image": "Hinzufügen",
       "show": "Einblenden",
       "remove": "Löschen",
-      "new_image": "Neues Bild"
+      "new_image": "Neues Bild",
+      "delete-title": "Bild löschen",
+      "delete-text": "Soll das Bild wirklich aus der Liste entfernt werden?"
     }
   }
 }

@@ -68,3 +68,11 @@ export function registerSettings(): void {
         default: 2000
     });
 }
+
+export interface VisionEntry {
+    id: string;
+    path: string;
+    name: string;
+    fadeIn: number;
+    fadeOut: number;
+}

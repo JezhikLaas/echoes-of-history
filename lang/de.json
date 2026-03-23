@@ -27,7 +27,8 @@
       "title": "Bilder einblenden",
       "add_image": "Hinzufügen",
       "show": "Einblenden",
-      "remove": "Löschen"
+      "remove": "Löschen",
+      "new_image": "Neues Bild"
     }
   }
 }

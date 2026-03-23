@@ -1,5 +1,6 @@
-import {MODULE_ID, SOCKET_NAME} from "../constants";
-import {writeLog} from "../utils";
+import { MODULE_ID, SOCKET_NAME } from "../constants";
+import { writeError, writeLog } from "../utils";
+import { VisionEditDialog } from "./vision-edit";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -14,7 +15,8 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         actions: {
             addImage: ImagesSidebar.#onAddImage,
             showImage: ImagesSidebar.#onShowImage,
-            deleteImage: ImagesSidebar.#onDeleteImage
+            deleteImage: ImagesSidebar.#onDeleteImage,
+            editEcho: ImagesSidebar.#onEditVision
         }
     };
 
@@ -38,8 +40,42 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     static #onDeleteImage(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
-        const index = parseInt(target.dataset.index || "0");
-        this._deleteImage(index);
+        const row = target.closest(".image-item") as HTMLElement | null;
+        const id = row?.dataset.id;
+        if (id) {
+            this._deleteImage(id); // Wir übergeben die ID statt des Index
+        }
+    }
+
+    static async #onEditVision(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
+        const settings = game.settings as any;
+        const row = target.closest(".image-item") as HTMLElement | null;
+        const id = row?.dataset.id;
+        if (!id) {
+            writeError("Unable to locate id to edit, exiting");
+            return;
+        }
+
+        const allImages = settings.get(MODULE_ID, "imageList") as any[];
+        const imageData = allImages.find(img => img.id === id);
+
+        if (!imageData) {
+            writeError("Image entry not found in settings list, exiting");
+            return;
+        }
+
+        const dialog = new VisionEditDialog(imageData, async (updatedEntry) => {
+            const index = allImages.findIndex(img => img.id === id);
+            if (index > -1) {
+                allImages[index] = updatedEntry;
+                await settings.set(MODULE_ID, "imageList", allImages);
+                await this.render();
+            }
+            else {
+                writeError("Image entry vanished during edit, not updating anything");
+            }
+        });
+        dialog.render({ force: true });
     }
 
     getData() {
@@ -105,37 +141,59 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     private async _addImage(path: string) {
         const settings = game.settings as any;
         const currentList = settings?.get(MODULE_ID, "imageList") as any[];
-        const name = path.split("/").pop() || "New Image";
-        currentList.push({ name, path });
-        await settings.set(MODULE_ID, "imageList", currentList);
-        this.render({ force: true });
+        const name = path.split('/').pop()?.replace(/\.[^/.]+$/, "") || game.i18n?.format("echoes-of-history.sidebar.new_image");
+        const newVision = {
+            id: foundry.utils.randomID(),
+            path: path,
+            name: name,
+            fadeIn: settings.get(MODULE_ID, "echoFadeIn"),
+            fadeOut: settings.get(MODULE_ID, "echoFadeOut")
+        };
+
+        await settings.set(MODULE_ID, "imageList", [...currentList, newVision]);
+        await this.render({ force: true });
     }
 
-    private async _deleteImage(index: number) {
+    private async _deleteImage(id: string) {
         const settings = game.settings as any;
         const currentList = settings.get(MODULE_ID, "imageList") as any[];
-        currentList.splice(index, 1);
-        await settings.set(MODULE_ID, "imageList", currentList);
-        this.render({ force: true });
+        const newList = currentList.filter(img => img.id !== id);
+
+        await settings.set(MODULE_ID, "imageList", newList);
+        await this.render({ force: true });
     }
 
     broadcastShow(path: string) {
         writeLog(`Broadcasting image show: ${path}`);
         const settings = game.settings as any;
+        const fadeIn = settings.get(MODULE_ID, "echoFadeIn");
+        const fadeOut = settings.get(MODULE_ID, "echoFadeOut");
+
         game.socket?.emit(
             SOCKET_NAME,
             {
                 action: "showImage",
                 path: path,
-                fadeIn: settings.get(MODULE_ID, "echoFadeIn"),
-                fadeOut: settings.get(MODULE_ID, "echoFadeOut")
+                fadeIn: fadeIn,
+                fadeOut: fadeOut
             });
+
         const overlay = document.getElementById("cine-show-overlay");
         const img = document.getElementById("cine-show-image") as HTMLImageElement;
-        if (overlay && img) {
-            img.src = path;
-            overlay.classList.remove("hiding");
-            overlay.classList.add("active");
+        if (!overlay) {
+            writeError("Unable to locate overlay, exiting");
+            return;
         }
+        if (!img) {
+            writeError("Unable to locate image, exiting");
+            return;
+        }
+
+        overlay.style.setProperty('--vision-fade-in', `${fadeIn}ms`);
+        overlay.style.setProperty('--vision-fade-out', `${fadeOut}ms`);
+
+        img.src = path;
+        overlay.classList.remove("hiding");
+        overlay.classList.add("active");
     }
 }

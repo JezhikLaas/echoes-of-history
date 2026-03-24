@@ -2,7 +2,8 @@ import { MODULE_ID, SOCKET_NAME } from "./constants";
 import { recapApi } from "./recap";
 import { registerSettings } from "./settings";
 import { ImagesSidebar } from "./ui/images-sidebar";
-import {writeLog} from "./utils";
+import { writeLog } from "./utils";
+import { VisionManager } from "./VisionManager";
 
 let imagesSidebar: ImagesSidebar | null = null;
 
@@ -49,6 +50,13 @@ Hooks.once("init", async () => {
         type: Object,
         default: []
     });
+    settings.register(MODULE_ID, "activeVisionState", {
+        name: "Aktive Vision ID",
+        scope: "world",
+        config: false,
+        type: String,
+        default: ""
+    });
 
     const partialPath = `modules/${MODULE_ID}/templates/directory-item.hbs`;
     const partialContent = await getTemplate(partialPath);
@@ -59,44 +67,28 @@ Hooks.once("init", async () => {
 
 Hooks.once("ready", () => {
     const overlay = document.createElement("div");
+
     overlay.id = "cine-show-overlay";
     overlay.innerHTML = `<img id="cine-show-image" src="" alt="">`;
     document.body.appendChild(overlay);
 
-    overlay.addEventListener("click", () => {
-        overlay.classList.remove("active");
-        overlay.classList.add("hiding");
-
-        if (game.user?.isGM) {
-            writeLog("GM clicked to hide image");
-            game.socket?.emit(SOCKET_NAME, { action: "hideImage" });
-        }
+    overlay.addEventListener("click", async () => {
+        await VisionManager.hideVision();
     });
+
+    writeLog("Restoring active vision after refresh");
+    VisionManager.showOverlayLocally(undefined, true);
 
     writeLog(`Socket Listener wird registriert auf: ${SOCKET_NAME}`);
 
-    game.socket?.on(SOCKET_NAME, (data: any) => {
+    game.socket?.on(SOCKET_NAME, async (data: any) => {
         const overlayElement = document.getElementById("cine-show-overlay");
         const imgElement = document.getElementById("cine-show-image") as HTMLImageElement;
 
-        writeLog("Overlay DOM-Element vorhanden:", !!overlay);
-        writeLog("Image DOM-Element vorhanden:", !!imgElement);
-
         if (data.action === "showImage" && overlayElement && imgElement) {
-            writeLog("Triggering Show Animation...");
-
-            const fadeIn = data.fadeIn || 3000;
-            const fadeOut = data.fadeOut || 3000;
-            overlay.style.setProperty('--vision-fade-in', `${fadeIn}ms`);
-            overlay.style.setProperty('--vision-fade-out', `${fadeOut}ms`);
-
-            imgElement.src = data.path;
-            overlay.classList.remove("hiding");
-            overlayElement.classList.add("active");
+            await VisionManager.showVision(data.id);
         } else if (data.action === "hideImage" && overlayElement) {
-            writeLog("Triggering Hide Animation...");
-            overlay.classList.add("hiding");
-            overlayElement.classList.remove("active");
+            await VisionManager.hideVision();
         }
     });
 

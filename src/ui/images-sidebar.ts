@@ -1,8 +1,9 @@
-import { MODULE_ID, SOCKET_NAME } from "../constants";
-import {writeError, writeLog, writeWarn} from "../utils";
+import { MODULE_ID } from "../constants";
+import { writeError, writeLog, writeWarn } from "../utils";
 import { VisionEditDialog } from "./vision-edit";
 import { FolderEntry, SidebarEntry, VisionEntry } from "../settings";
 import { FolderEditDialog } from "./folder-edit";
+import { VisionManager } from "../VisionManager";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -275,40 +276,6 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
 
     broadcastShow(id: string) {
         writeLog(`Broadcasting image show: ${id}`);
-        const settings = game.settings as any;
-
-        const allImages = settings.get(MODULE_ID, "imageList") as VisionEntry[];
-        const imageData = allImages.find(img => img.id === id);
-        if (!imageData) {
-            writeError(`Image with ID ${id} not found in list`);
-            return;
-        }
-
-        game.socket?.emit(
-            SOCKET_NAME,
-            {
-                action: "showImage",
-                path: imageData.path,
-                fadeIn: imageData.fadeIn,
-                fadeOut: imageData.fadeOut
-            });
-
-        const overlay = document.getElementById("cine-show-overlay");
-        const img = document.getElementById("cine-show-image") as HTMLImageElement;
-        if (!overlay) {
-            writeError("Unable to locate overlay, exiting");
-            return;
-        }
-        if (!img) {
-            writeError("Unable to locate image, exiting");
-            return;
-        }
-
-        overlay.style.setProperty('--vision-fade-in', `${imageData.fadeIn}ms`);
-        overlay.style.setProperty('--vision-fade-out', `${imageData.fadeOut}ms`);
-
-        img.src = imageData.path;
-        overlay.classList.remove("hiding");
-        overlay.classList.add("active");
+        VisionManager.showVision(id);
     }
 }

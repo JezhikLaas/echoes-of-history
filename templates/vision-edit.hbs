@@ -43,6 +43,116 @@
         </div>
     </div>
 
+    <div class="section-divider">
+        <i class="fas fa-sign-in-alt" style="margin-right: 5px;"></i>
+        {{localize "echoes-of-history.settings.section-fade-in"}}
+    </div>
+
+    <div class="form-group" style="margin-bottom: 15px;">
+        <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-type-label"}}</label>
+        <div class="form-fields" style="flex: 2;">
+            <select name="fadeInExecute.type" data-action="changeMacroType">
+                <option value="none" {{#if isFadeInNone}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-none"}}</option>
+                <option value="inline" {{#if isFadeInInline}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-inline"}}</option>
+                <option value="reference" {{#if isFadeInReference}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-reference"}}</option>
+            </select>
+        </div>
+    </div>
+
+    {{#if isFadeInInline}}
+        <div class="form-group stacked" style="margin-bottom: 15px;">
+            <label>{{localize "echoes-of-history.settings.macro-code-label"}}</label>
+            <textarea name="fadeInExecute.macroCode" style="font-family: monospace; min-height: 120px; width: 100%; margin-top: 5px;" placeholder="// JavaScript...">{{entry.fadeInExecute.macroCode}}</textarea>
+        </div>
+    {{/if}}
+
+    {{#if isFadeInReference}}
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-select-label"}}</label>
+            <div class="form-fields" style="flex: 2;">
+                <select name="fadeInExecute.macroId">
+                    <option value="">-- {{localize "echoes-of-history.settings.macro-select-placeholder"}} --</option>
+                    {{#each allMacros}}
+                        <option value="{{this.id}}" {{#if (eq ../entry.fadeInExecute.macroId this.id)}}selected{{/if}}>{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group stacked" style="margin-bottom: 15px;">
+            <label>{{localize "echoes-of-history.settings.macro-args-label"}}</label>
+            <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
+                {{#each fadeInMacroArgs}}
+                    <div class="flexrow" style="gap: 5px;">
+                        <input type="text" name="fadeInExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key (z.B. vol)" style="flex: 1;">
+                        <input type="text" name="fadeInExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value (z.B. 0.5)" style="flex: 1;">
+                        <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeInArg" data-index="{{@index}}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                {{/each}}
+                <button type="button" data-action="addInArg" style="margin-top: 5px;">
+                    <i class="fas fa-plus"></i> {{localize "echoes-of-history.settings.add-arg-button"}}
+                </button>
+            </div>
+        </div>
+    {{/if}}
+
+    <div class="section-divider">
+        <i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>
+        {{localize "echoes-of-history.settings.section-fade-out"}}
+    </div>
+
+    <div class="form-group" style="margin-bottom: 15px;">
+        <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-type-label"}}</label>
+        <div class="form-fields" style="flex: 2;">
+            <select name="fadeOutExecute.type" data-action="changeMacroType">
+                <option value="none" {{#if isFadeOutNone}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-none"}}</option>
+                <option value="inline" {{#if isFadeOutInline}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-inline"}}</option>
+                <option value="reference" {{#if isFadeOutReference}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-reference"}}</option>
+            </select>
+        </div>
+    </div>
+
+    {{#if isFadeOutInline}}
+        <div class="form-group stacked" style="margin-bottom: 15px;">
+            <label>{{localize "echoes-of-history.settings.macro-code-label"}}</label>
+            <textarea name="fadeOutExecute.macroCode" style="font-family: monospace; min-height: 120px; width: 100%; margin-top: 5px;" placeholder="// JavaScript...">{{entry.fadeOutExecute.macroCode}}</textarea>
+        </div>
+    {{/if}}
+
+    {{#if isFadeOutReference}}
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-select-label"}}</label>
+            <div class="form-fields" style="flex: 2;">
+                <select name="fadeOutExecute.macroId">
+                    <option value="">-- {{localize "echoes-of-history.settings.macro-select-placeholder"}} --</option>
+                    {{#each allMacros}}
+                        <option value="{{this.id}}" {{#if (eq ../entry.fadeOutExecute.macroId this.id)}}selected{{/if}}>{{this.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group stacked" style="margin-bottom: 15px;">
+            <label>{{localize "echoes-of-history.settings.macro-args-label"}}</label>
+            <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
+                {{#each fadeOutMacroArgs}}
+                    <div class="flexrow" style="gap: 5px;">
+                        <input type="text" name="fadeOutExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key (z.B. vol)" style="flex: 1;">
+                        <input type="text" name="fadeOutExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value (z.B. 0.5)" style="flex: 1;">
+                        <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeOutArg" data-index="{{@index}}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                {{/each}}
+                <button type="button" data-action="addOutArg" style="margin-top: 5px;">
+                    <i class="fas fa-plus"></i> {{localize "echoes-of-history.settings.add-arg-button"}}
+                </button>
+            </div>
+        </div>
+    {{/if}}
+
     <footer class="form-footer" style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #7774;">
         <button type="submit" data-action="save">
             <i class="fas fa-save"></i> {{localize "echoes-of-history.settings.save-button"}}

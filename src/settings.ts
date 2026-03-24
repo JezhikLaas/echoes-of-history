@@ -69,6 +69,23 @@ export function registerSettings(): void {
     });
 }
 
+export interface MacroEntryNone {
+    type: "none";
+}
+
+export interface MacroEntryInline {
+    type: "inline";
+    macroCode: string;
+}
+
+export interface MacroEntryReference {
+    type: "reference";
+    macroId: string;
+    arguments: { key: string, value: string }[];
+}
+
+export type MacroEntry = MacroEntryNone | MacroEntryInline | MacroEntryReference;
+
 export interface VisionEntry {
     type: "vision";
     id: string;
@@ -77,6 +94,8 @@ export interface VisionEntry {
     fadeIn: number;
     fadeOut: number;
     parentId: string | null;
+    fadeInExecute: MacroEntry;
+    fadeOutExecute: MacroEntry;
 }
 
 export interface FolderEntry {

@@ -26,7 +26,19 @@
       "fade-in-label": "Einblenden (ms)",
       "recap-hint": "Abschnitte durch eine <strong>Leerzeile</strong> trennen. Zeilenumbrüche innerhalb eines Abschnitts werden übernommen.",
       "folder-label": "Ordner",
-      "folder-root": "--"
+      "folder-root": "--",
+      "macro-section-title": "Makro Abschnitt",
+      "macro-none": "Keins",
+      "macro-inline": "Inline",
+      "macro-reference": "Referenz",
+      "macro-code-label": "Skript",
+      "macro-select-label": "Makro auswählen...",
+      "macro-select-placeholder": "Wählen Sie ein Makro",
+      "macro-type-label": "Makro Typ",
+      "macro-args-label": "Parameter",
+      "add-arg-button": "Neuer Parameter",
+      "section-fade-out": "Ausblenden",
+      "section-fade-in": "Einblenden"
     },
     "recap": {
       "no_sections": "[{name}] Keine Recap-Abschnitte gesetzt (World Setting: recapSections)",
@@ -53,6 +65,14 @@
       "name-label": "Name",
       "save-button": "Speichern",
       "edit-title": "Ordner bearbeiten"
+    },
+    "validation": {
+      "macro-required": "Makro erforderlich",
+      "keys-required": "Keys dürfen nicht leer sein",
+      "name-required": "Name darf nicht leer sein",
+      "fade-out-positive": "Fade-Out muss positiv sein",
+      "fade-in-positive": "Fade-In muss positiv sein",
+      "script-required": "Script erforderlich"
     }
   }
 }

@@ -26,7 +26,19 @@
       "fade-in-label": "Fade-in (ms)",
       "recap-hint": "Divide sections using <strong>empty lines</strong>. Line breaks within a section are preserved.",
       "folder-label": "Folder",
-      "folder-root": "--"
+      "folder-root": "--",
+      "macro-section-title": "Macro Section",
+      "macro-none": "None",
+      "macro-inline": "Inline",
+      "macro-reference": "Reference",
+      "macro-code-label": "Script",
+      "macro-select-label": "Select Macro...",
+      "macro-select-placeholder": "Select a macro",
+      "macro-type-label": "Macro Type",
+      "macro-args-label": "Parameters",
+      "add-arg-button": "Add Parameter",
+      "section-fade-out": "Fade Out",
+      "section-fade-in": "Fade In"
     },
     "recap": {
       "no_sections": "[{name}] No recap sections defined (World Setting: recapSections)",
@@ -52,6 +64,14 @@
       "name-label": "Name",
       "save-button": "Save",
       "edit-title": "Edit Folder"
+    },
+    "validation": {
+      "macro-required": "Macro required",
+      "keys-required": "Keys must not be empty",
+      "name-required": "Name must not be empty",
+      "fade-out-positive": "Fade-Out must be positive",
+      "fade-in-positive": "Fade-In must be positive",
+      "script-required": "Script must not be empty"
     }
   }
 }

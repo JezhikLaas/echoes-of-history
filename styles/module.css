@@ -1,3 +1,29 @@
+.vision-edit-container .section-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0 10px 0;
+    font-weight: bold;
+    font-variant: small-caps;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.vision-edit-container .section-divider::before,
+.vision-edit-container .section-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #7774; /* Dezente Foundry-Linie */
+}
+
+.vision-edit-container .section-divider:not(:empty)::before {
+    margin-right: .5em;
+}
+
+.vision-edit-container .section-divider:not(:empty)::after {
+    margin-left: .5em;
+}
+
 .echoes-of-history-app-shell .directory-item {
     display: flex;
     align-items: center;

@@ -1,0 +1,34 @@
+<li class="{{#if (eq type 'folder')}}folder-item{{else}}image-item{{/if}} directory-item flexrow" data-id="{{id}}">
+
+    <div class="echo-info clickable"
+         data-action="{{#if (eq type 'folder')}}toggleFolder{{else}}showImage{{/if}}"
+         title="{{localize 'echoes-of-history.sidebar.show'}}">
+
+        {{#if (eq type "folder")}}
+            <i class="fas {{#if expanded}}fa-folder-open{{else}}fa-folder{{/if}}" style="margin-right: 5px;"></i>
+        {{/if}}
+
+        <span class="image-name">{{this.name}}</span>
+    </div>
+
+    <div class="controls flexrow">
+        <button class="icon-button"
+                data-action="{{#if (eq type 'folder')}}editFolder{{else}}editEcho{{/if}}"
+                title="{{localize 'echoes-of-history.sidebar.edit'}}">
+            <i class="fas fa-cog"></i>
+        </button>
+        <button class="icon-button"
+                data-action="{{#if (eq type 'folder')}}deleteFolder{{else}}deleteImage{{/if}}"
+                title="{{localize 'echoes-of-history.sidebar.remove'}}">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+</li>
+
+{{#if (and (eq type "folder") expanded)}}
+    {{#each children}}
+        <div style="padding-left: 15px; width: 100%;">
+            {{> directoryItem this}}
+        </div>
+    {{/each}}
+{{/if}}

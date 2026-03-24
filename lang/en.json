@@ -24,7 +24,9 @@
       "recap-title": "Edit sections",
       "fade-out-label": "Fade-Out (ms)",
       "fade-in-label": "Fade-in (ms)",
-      "recap-hint": "Divide sections using <strong>empty lines</strong>. Line breaks within a section are preserved."
+      "recap-hint": "Divide sections using <strong>empty lines</strong>. Line breaks within a section are preserved.",
+      "folder-label": "Folder",
+      "folder-root": "--"
     },
     "recap": {
       "no_sections": "[{name}] No recap sections defined (World Setting: recapSections)",
@@ -40,6 +42,16 @@
       "remove": "Delete",
       "delete-title": "Delete image",
       "delete-text": "Really remove image from the list?"
+    },
+    "folders": {
+      "new-folder": "New Folder",
+      "edit-folder": "Edit Folder",
+      "delete-folder": "Delete Folder",
+      "delete-title": "Delete Folder (w/o content)",
+      "delete-text": "Really remove the folder from the list?",
+      "name-label": "Name",
+      "save-button": "Save",
+      "edit-title": "Edit Folder"
     }
   }
 }

@@ -1,0 +1,27 @@
+<div class="flexcol" style="padding: 12px;">
+    <div class="form-group" style="margin-bottom: 10px;">
+        <label>{{localize "echoes-of-history.settings.folder-label"}}</label>
+        <div class="form-fields">
+            <select name="parentId">
+                <option value="">{{localize "echoes-of-history.settings.folder-root"}}</option>
+                {{#each folders}}
+                    <option value="{{this.id}}" {{#if (eq ../currentParentId this.id)}}selected{{/if}}>
+                        {{this.name}}
+                    </option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+    <div class="form-group" style="margin-bottom: 15px;">
+        <label style="flex: 1;">{{localize 'echoes-of-history.folders.name-label'}}</label>
+        <div class="form-fields" style="flex: 2;">
+            <input type="text" name="name" value="{{folder.name}}" autofocus>
+        </div>
+    </div>
+
+    <footer style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #7774; display: flex; justify-content: flex-end;">
+        <button type="submit" style="cursor: pointer; padding: 4px 12px;">
+            <i class="fas fa-save"></i> {{localize 'echoes-of-history.folders.save-button'}}
+        </button>
+    </footer>
+</div>

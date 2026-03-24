@@ -31,12 +31,20 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
         form: { template: `modules/${MODULE_ID}/templates/vision-edit.hbs` }
     };
 
-    protected override async _prepareContext(_options: any): Promise<VisionEditContext> {
+    protected override async _prepareContext(_options: any): Promise<any> {
         const settings = game.settings as any;
+        const allEntries = settings.get(MODULE_ID, "imageList") as any[] || [];
+
+        const folders = allEntries
+            .filter(e => e.type === "folder")
+            .map(f => ({ id: f.id, name: f.name }));
+
         return {
             entry: this.entry,
             defaultIn: settings.get(MODULE_ID, "echoFadeIn"),
-            defaultOut:settings.get(MODULE_ID, "echoFadeOut")
+            defaultOut: settings.get(MODULE_ID, "echoFadeOut"),
+            folders: folders,
+            currentParentId: (this.entry as any).parentId || ""
         };
     }
 
@@ -50,7 +58,8 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
             ...this.entry,
             name: (data.name as string) || this.entry.name,
             fadeIn: Number(data.fadeIn),
-            fadeOut: Number(data.fadeOut)
+            fadeOut: Number(data.fadeOut),
+            parentId: data.parentId || null
         };
 
         this.onSaveCallback(updated);

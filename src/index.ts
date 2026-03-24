@@ -19,7 +19,7 @@ function applyVisionTimings(): void {
     }
 }
 
-Hooks.once("init", () => {
+Hooks.once("init", async () => {
     writeLog("start init");
 
     registerSettings();
@@ -49,6 +49,10 @@ Hooks.once("init", () => {
         type: Object,
         default: []
     });
+
+    const partialPath = `modules/${MODULE_ID}/templates/directory-item.hbs`;
+    const partialContent = await getTemplate(partialPath);
+    Handlebars.registerPartial("directoryItem", partialContent);
 
     writeLog("init done");
 });

@@ -29,6 +29,20 @@
         </div>
     </div>
 
+    <div class="form-group" style="margin-bottom: 15px;">
+        <label style="flex: 1;">{{localize "echoes-of-history.settings.folder-label"}}</label>
+        <div class="form-fields" style="flex: 2;">
+            <select name="parentId">
+                <option value="">{{localize "echoes-of-history.settings.folder-root"}}</option>
+                {{#each folders}}
+                    <option value="{{this.id}}" {{#if (eq ../currentParentId this.id)}}selected{{/if}}>
+                        {{this.name}}
+                    </option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
     <footer class="form-footer" style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #7774;">
         <button type="submit" data-action="save">
             <i class="fas fa-save"></i> {{localize "echoes-of-history.settings.save-button"}}

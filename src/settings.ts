@@ -70,16 +70,21 @@ export function registerSettings(): void {
 }
 
 export interface VisionEntry {
+    type: "vision";
     id: string;
     path: string;
     name: string;
     fadeIn: number;
     fadeOut: number;
+    parentId: string | null;
 }
 
 export interface FolderEntry {
+    type: "folder";
     id: string;
     name: string;
     parentId: string | null;
     expanded: boolean;
 }
+
+export type SidebarEntry = FolderEntry | VisionEntry;

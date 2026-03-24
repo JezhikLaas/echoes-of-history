@@ -24,7 +24,9 @@
       "recap-title": "Abschnitte bearbeiten",
       "fade-out-label": "Ausblenden (ms)",
       "fade-in-label": "Einblenden (ms)",
-      "recap-hint": "Abschnitte durch eine <strong>Leerzeile</strong> trennen. Zeilenumbrüche innerhalb eines Abschnitts werden übernommen."
+      "recap-hint": "Abschnitte durch eine <strong>Leerzeile</strong> trennen. Zeilenumbrüche innerhalb eines Abschnitts werden übernommen.",
+      "folder-label": "Ordner",
+      "folder-root": "--"
     },
     "recap": {
       "no_sections": "[{name}] Keine Recap-Abschnitte gesetzt (World Setting: recapSections)",
@@ -41,6 +43,16 @@
       "new_image": "Neues Bild",
       "delete-title": "Bild löschen",
       "delete-text": "Soll das Bild wirklich aus der Liste entfernt werden?"
+    },
+    "folders": {
+      "new-folder": "Neuer Ordner",
+      "edit-folder": "Ordner bearbeiten",
+      "delete-folder": "Ordner löschen",
+      "delete-title": "Ordner löschen (Inhalt bleibt erhalten)",
+      "delete-text": "Soll der Ordner wirklich entfernt werden?",
+      "name-label": "Name",
+      "save-button": "Speichern",
+      "edit-title": "Ordner bearbeiten"
     }
   }
 }

@@ -1,13 +1,14 @@
 import { MODULE_ID, SOCKET_NAME } from "../constants";
-import { writeError, writeLog } from "../utils";
+import {writeError, writeLog, writeWarn} from "../utils";
 import { VisionEditDialog } from "./vision-edit";
-import {VisionEntry} from "../settings";
+import { FolderEntry, SidebarEntry, VisionEntry } from "../settings";
+import { FolderEditDialog } from "./folder-edit";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     static override DEFAULT_OPTIONS = {
-        id: `{${MODULE_ID}-tab`,
+        id: `${MODULE_ID}-tab`,
         tag: "section",
         classes: ["echoes-of-history-app-shell"],
         window: {
@@ -17,7 +18,11 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             addImage: ImagesSidebar.#onAddImage,
             showImage: ImagesSidebar.#onShowImage,
             deleteImage: ImagesSidebar.#onDeleteImage,
-            editEcho: ImagesSidebar.#onEditVision
+            editEcho: ImagesSidebar.#onEditVision,
+            toggleFolder: ImagesSidebar.#onToggleFolder,
+            addFolder: ImagesSidebar.#onAddFolder,
+            editFolder: ImagesSidebar.#onEditFolder,
+            deleteFolder: ImagesSidebar.#onDeleteFolder
         }
     };
 
@@ -52,8 +57,39 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
                 modal: true
             });
             if (confirm) {
-                await this._deleteImage(id); // Wir übergeben die ID statt des Index
+                await this._deleteImage(id);
             }
+        }
+        else {
+            writeWarn("ID to delete not found");
+        }
+    }
+
+    static async #onDeleteFolder(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
+        const row = target.closest(".folder-item") as HTMLElement | null;
+        const id = row?.dataset.id;
+        if (id) {
+            const confirm = await (foundry.applications.api as any).DialogV2.confirm({
+                window: { title: game.i18n?.localize("echoes-of-history.folders.delete-title") },
+                content: `<p>${game.i18n?.localize("echoes-of-history.folders.delete-text")}</p>`,
+                rejectClose: false,
+                modal: true
+            });
+            if (confirm) {
+                const settings = game.settings as any;
+                const allEntries = settings.get(MODULE_ID, "imageList");
+                const entryToDelete = allEntries.find((e: { id: string; }) => e.id === id);
+
+                allEntries.forEach((e: { parentId: null; }) => {
+                    if (e.parentId === entryToDelete.id) {
+                        e.parentId = null;
+                    }
+                });
+                await this._deleteImage(id);
+            }
+        }
+        else {
+            writeWarn("ID to delete not found");
         }
     }
 
@@ -86,6 +122,52 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             }
         });
         dialog.render({ force: true });
+    }
+
+    static async #onToggleFolder(this: ImagesSidebar, event: PointerEvent, target: HTMLElement) {
+        const row = target.closest(".folder-item") as HTMLElement | null;
+        const id = row?.dataset.id;
+        if (!id) return;
+
+        const settings = game.settings as any;
+        const allEntries = settings.get(MODULE_ID, "imageList") as any[];
+
+        const index = allEntries.findIndex(e => e.id === id);
+        if (index > -1) {
+            allEntries[index].expanded = !allEntries[index].expanded;
+
+            // 4. Speichern und neu rendern
+            await settings.set(MODULE_ID, "imageList", allEntries);
+            await this.render();
+        }
+    }
+
+    static async #onAddFolder(this: ImagesSidebar, _event: PointerEvent, _target: HTMLElement) {
+        const settings = game.settings as any;
+        const currentList = settings.get(MODULE_ID, "imageList") as SidebarEntry[];
+
+        const newFolder: FolderEntry = {
+            type: "folder",
+            id: foundry.utils.randomID(),
+            name: game.i18n?.localize("echoes-of-history.folders.new-folder") ?? "New Folder",
+            parentId: null,
+            expanded: true
+        };
+
+        await new FolderEditDialog(newFolder, { isNew: true }).render({ force: true });
+    }
+
+    static async #onEditFolder(this: ImagesSidebar, event: PointerEvent, target: HTMLElement) {
+        const row = target.closest(".folder-item") as HTMLElement | null;
+        const id = row?.dataset.id;
+        if (!id) return;
+
+        const allEntries = (game.settings as any).get(MODULE_ID, "imageList");
+        const folder = allEntries.find((e: { id: string; }) => e.id === id);
+
+        if (folder) {
+            await new FolderEditDialog(folder).render({force: true});
+        }
     }
 
     getData() {
@@ -142,9 +224,27 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
 
     override async _prepareContext(_options: any): Promise<any> {
         const settings = game.settings as any;
-        const storedImages = settings?.get(MODULE_ID, "imageList") as any[] || [];
+        const allEntries = settings.get(MODULE_ID, "imageList") as any[] || [];
+
+        const sanitizedEntries = allEntries.map(e => ({
+            ...e,
+            type: e.type || "vision",
+            parentId: e.parentId || null
+        }));
+
+        const buildTree = (parentId: string | null = null): any[] => {
+            return sanitizedEntries
+                .filter(e => e.parentId === parentId)
+                .map(e => {
+                    if (e.type === "folder") {
+                        return { ...e, children: buildTree(e.id) };
+                    }
+                    return e;
+                });
+        };
+
         return {
-            images: storedImages
+            tree: buildTree(null)
         };
     }
 

@@ -1,42 +1,12 @@
-<div class="echoes-of-history-sidebar-wrapper">
-    <div class="echoes-header-breadcrumb">
-        <span class="breadcrumb-text">ECHOES</span>
-    </div>
+<div class="echoes-of-history-sidebar">
+    <header class="sidebar-header flexrow">
+        <button data-action="addImage"><i class="fas fa-image"></i> {{localize "Add Image"}}</button>
+        <button data-action="addFolder"><i class="fas fa-folder-plus"></i></button>
+    </header>
 
-    <div class="echoes-of-history-container">
-        <header class="directory-header">
-            <div class="header-actions action-buttons flexrow">
-                <button class="create-image" data-action="addImage">
-                    <i class="fas fa-plus"></i> {{localize "echoes-of-history.sidebar.add_image"}}
-                </button>
-            </div>
-        </header>
-
-        <div class="echoes-of-history-sidebar">
-            <ul class="image-list directory-list">
-                {{#each images}}
-                    <li class="image-item directory-item flexrow" data-id="{{this.id}}">
-                        <div class="echo-info clickable" data-action="showImage" title="{{localize 'echoes-of-history.sidebar.show'}}">
-                            <span class="image-name">{{this.name}}</span>
-                        </div>
-                        <div class="controls flexrow">
-                            <button class="icon-button" data-action="editEcho" title="{{localize 'echoes-of-history.sidebar.edit'}}">
-                                <i class="fas fa-cog"></i>
-                            </button>
-                            <button class="icon-button" data-action="deleteImage" title="{{localize 'echoes-of-history.sidebar.remove'}}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </li>
-                {{/each}}
-            </ul>
-        </div>
-
-        {{#unless images.length}}
-            <div class="empty-state">
-                <i class="fas fa-history"></i>
-                <p>No echoes recorded yet...</p>
-            </div>
-        {{/unless}}
-    </div>
+    <ul class="image-list directory-list">
+        {{#each tree}}
+            {{> directoryItem this}}
+        {{/each}}
+    </ul>
 </div>

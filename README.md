@@ -82,3 +82,8 @@ Available via `game.RECAP_ECHOES.recap`:
 | `show()`                | Show a single text slide (no autoplay). |
 | `setSections(string[])` | Set slide contents programmatically.    |
 
+---
+
+**Noble be man, helpful and good.**
+
+Use this module to create moments your players will remember, no matter how many kilometers lie between your tables.

@@ -1,5 +1,4 @@
 import { MODULE_ID } from "./constants";
-import {VisionEntry} from "./settings";
 
 export function info (key: string, data = {}) {
     if (game?.i18n) {

@@ -1,6 +1,6 @@
 import { MODULE_ID } from "../constants";
-import {MacroEntryInline, MacroEntryReference, VisionEntry} from "../settings";
-import {warn} from "../utils";
+import { VisionEntry } from "../settings";
+import { warn } from "../utils";
 
 interface VisionEditContext {
     entry: VisionEntry;

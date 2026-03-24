@@ -1,7 +1,7 @@
 import { MODULE_ID } from "../constants";
 import { writeError, writeLog, writeWarn } from "../utils";
 import { VisionEditDialog } from "./vision-edit";
-import { FolderEntry, SidebarEntry, VisionEntry } from "../settings";
+import { FolderEntry, SidebarEntry } from "../settings";
 import { FolderEditDialog } from "./folder-edit";
 import { VisionManager } from "../VisionManager";
 
@@ -125,7 +125,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         dialog.render({ force: true });
     }
 
-    static async #onToggleFolder(this: ImagesSidebar, event: PointerEvent, target: HTMLElement) {
+    static async #onToggleFolder(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
         const row = target.closest(".folder-item") as HTMLElement | null;
         const id = row?.dataset.id;
         if (!id) return;
@@ -144,9 +144,6 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     static async #onAddFolder(this: ImagesSidebar, _event: PointerEvent, _target: HTMLElement) {
-        const settings = game.settings as any;
-        const currentList = settings.get(MODULE_ID, "imageList") as SidebarEntry[];
-
         const newFolder: FolderEntry = {
             type: "folder",
             id: foundry.utils.randomID(),
@@ -158,7 +155,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         await new FolderEditDialog(newFolder, { isNew: true }).render({ force: true });
     }
 
-    static async #onEditFolder(this: ImagesSidebar, event: PointerEvent, target: HTMLElement) {
+    static async #onEditFolder(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
         const row = target.closest(".folder-item") as HTMLElement | null;
         const id = row?.dataset.id;
         if (!id) return;

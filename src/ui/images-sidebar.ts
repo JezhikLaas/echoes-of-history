@@ -1,9 +1,9 @@
 import { MODULE_ID } from "../constants";
-import { writeError, writeLog, writeWarn } from "../utils";
+import { writeError, writeLog, writeWarn } from "../utils/logging";
 import { VisionEditDialog } from "./vision-edit";
 import { FolderEntry, SidebarEntry } from "../settings";
 import { FolderEditDialog } from "./folder-edit";
-import { VisionManager } from "../VisionManager";
+import { VisionManager } from "../vision-manager";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -29,9 +29,26 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
 
     static override PARTS: any = {
         main: {
-            template: `modules/${MODULE_ID}/templates/images-sidebar.hbs`
+            template: `modules/${MODULE_ID}/templates/images-sidebar.hbs`,
+            templates: [
+                `modules/${MODULE_ID}/templates/directory-item.hbs`
+            ]
         }
     };
+
+    public static async registerPartials() {
+        const partials = {
+            "directoryItem": `modules/${MODULE_ID}/templates/directory-item.hbs`
+        };
+
+        for (const [name, path] of Object.entries(partials)) {
+            const response = await fetch(path);
+            const content = await response.text();
+            Handlebars.registerPartial(name, content);
+        }
+
+        console.log("Echoes | Partials erfolgreich für Handlebars registriert.");
+    }
 
     static async #onAddImage(this: ImagesSidebar, _event: PointerEvent, _target: HTMLElement) {
         const picker = new (foundry.applications.apps as any).FilePicker({

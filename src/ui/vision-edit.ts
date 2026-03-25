@@ -1,6 +1,6 @@
 import { MODULE_ID } from "../constants";
 import { VisionEntry } from "../settings";
-import { warn } from "../utils";
+import { warn } from "../utils/notifications";
 
 interface VisionEditContext {
     entry: VisionEntry;

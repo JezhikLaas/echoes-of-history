@@ -1,6 +1,6 @@
 import { MODULE_ID } from "./constants";
 import { RecapEditor } from "./ui/recap-editor";
-import { writeWarn } from "./utils";
+import { writeWarn } from "./utils/logging";
 
 export function registerSettings(): void {
     const settings = game.settings as any;
@@ -66,6 +66,21 @@ export function registerSettings(): void {
         config: true,
         type: Number,
         default: 2000
+    });
+
+    settings.register(MODULE_ID, "imageList", {
+        name: "Stored Cinematic Images",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: []
+    });
+    settings.register(MODULE_ID, "activeVisionState", {
+        name: "Aktive Vision ID",
+        scope: "world",
+        config: false,
+        type: String,
+        default: ""
     });
 }
 

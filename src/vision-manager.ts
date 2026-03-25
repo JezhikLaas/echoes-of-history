@@ -1,16 +1,37 @@
 import { MODULE_ID, SOCKET_NAME } from "./constants";
 import { VisionEntry } from "./settings";
-import { writeWarn } from "./utils";
+import {writeLog, writeWarn} from "./utils/logging";
 
 export class VisionManager {
-    private static async setActiveId(id: string | null) {
-        const settings = game.settings as any;
-        await settings.set(MODULE_ID, "activeVisionState", id || "");
-    }
+    public static initialize() {
+        const overlay = document.createElement("div");
 
-    private static get activeId(): string {
-        const settings = game.settings as any;
-        return settings.get(MODULE_ID, "activeVisionState") as string;
+        overlay.id = "cine-show-overlay";
+        overlay.innerHTML = `<img id="cine-show-image" src="" alt="">`;
+        document.body.appendChild(overlay);
+
+        overlay.addEventListener("click", async () => {
+            await VisionManager.hideVision();
+        });
+
+        writeLog("Restoring active vision after refresh");
+        VisionManager.showOverlayLocally(undefined, true);
+
+        writeLog(`Socket Listener wird registriert auf: ${SOCKET_NAME}`);
+
+        game.socket?.on(SOCKET_NAME, async (data: any) => {
+            const overlayElement = document.getElementById("cine-show-overlay");
+            const imgElement = document.getElementById("cine-show-image") as HTMLImageElement;
+
+            if (data.action === "showImage" && overlayElement && imgElement) {
+                await VisionManager.showVision(data.id);
+            } else if (data.action === "hideImage" && overlayElement) {
+                await VisionManager.hideVision();
+            }
+        });
+
+        this.applyVisionTimings();
+        Hooks.on("closeSettingsConfig", () => this.applyVisionTimings());
     }
 
     public static async showVision(id: string) {
@@ -34,6 +55,8 @@ export class VisionManager {
         this.showOverlayLocally(entry);
     }
 
+
+
     public static async hideVision() {
         if (!this.activeId) return;
 
@@ -48,6 +71,29 @@ export class VisionManager {
         }
 
         this.hideOverlayLocally();
+    }
+
+    private static applyVisionTimings(): void{
+        const settings = game.settings as any;
+        const fadeIn = settings.get(MODULE_ID, "echoFadeIn") as number;
+        const fadeOut = settings.get(MODULE_ID, "echoFadeOut") as number;
+
+        const overlay = document.getElementById("cine-show-overlay");
+        if (overlay) {
+            overlay.style.setProperty('--vision-fade-in', `${fadeIn}ms`);
+            overlay.style.setProperty('--vision-fade-out', `${fadeOut}ms`);
+            console.log(`${MODULE_ID} | Vision Timings updated: In ${fadeIn}ms, Out ${fadeOut}ms`);
+        }
+    }
+
+    private static async setActiveId(id: string | null) {
+        const settings = game.settings as any;
+        await settings.set(MODULE_ID, "activeVisionState", id || "");
+    }
+
+    private static get activeId(): string {
+        const settings = game.settings as any;
+        return settings.get(MODULE_ID, "activeVisionState") as string;
     }
 
     private static getEntryById(id: string): VisionEntry | undefined {

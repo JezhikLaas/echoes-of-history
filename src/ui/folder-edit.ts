@@ -1,5 +1,5 @@
 import { MODULE_ID } from "../constants";
-import { writeWarn } from "../utils";
+import { writeWarn } from "../utils/logging";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 

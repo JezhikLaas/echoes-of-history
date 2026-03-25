@@ -14,7 +14,7 @@ export class Recap {
     private static readonly FADE_MS = 600;
     private static readonly OVERLAY_FADE_MS = 800;
 
-    public static async start(options?: RecapOptions): Promise<void>  {
+    public static async start(_options?: RecapOptions): Promise<void>  {
         const settings = game.settings as any;
         if (!settings) return;
         if (this.isRunning || this.isOverlayOpen()) return;
@@ -79,7 +79,7 @@ export class Recap {
         this.isRunning = false;
     }
 
-    public static show(sections?: string[], options?: RecapOptions): void {
+    public static show(sections?: string[], _options?: RecapOptions): void {
         const list = sections ?? this.readSectionsFromSettings();
         if (list.length === 0) {
             warn("echoes-of-history.recap.no_sections", {name: MODULE_ID});

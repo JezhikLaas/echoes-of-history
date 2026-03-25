@@ -1,4 +1,4 @@
-import { MODULE_ID, SOCKET_NAME } from "./constants";
+import { MODULE_ID } from "./constants";
 import { registerSettings } from "./settings";
 import { ImagesSidebar } from "./ui/images-sidebar";
 import { SidebarIntegration } from "./utils/sidebar-integration";

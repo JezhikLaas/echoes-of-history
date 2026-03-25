@@ -1,7 +1,7 @@
 import { MODULE_ID } from "../constants";
 import { writeError, writeLog, writeWarn } from "../utils/logging";
 import { VisionEditDialog } from "./vision-edit";
-import { FolderEntry, SidebarEntry } from "../settings";
+import { FolderEntry } from "../settings";
 import { FolderEditDialog } from "./folder-edit";
 import { VisionManager } from "../vision-manager";
 

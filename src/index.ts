@@ -29,7 +29,6 @@ function initializeApi(): void {
 }
 
 async function registerPartialTemplates(): Promise<void> {
-    // I never found
     await ImagesSidebar.registerPartials();
 }
 
@@ -38,6 +37,7 @@ Hooks.once("init", async () => {
 
     registerSettings();
     await registerPartialTemplates();
+    initializeApi();
 
     SidebarIntegration.initialize(MODULE_ID, {
         icon: "fa-solid fa-clapperboard",
@@ -50,8 +50,6 @@ Hooks.once("init", async () => {
 
 Hooks.once("ready", () => {
     VisionManager.initialize();
-    initializeApi();
-
     writeLog("ready");
 });
 

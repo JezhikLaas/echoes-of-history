@@ -1,7 +1,10 @@
 <div class="echoes-of-history-sidebar">
     <header class="sidebar-header flexrow">
-        <button data-action="addImage"><i class="fas fa-image"></i> {{localize "Add Image"}}</button>
+        <button data-action="addImage"><i class="fas fa-image"></i> {{localize "echoes-of-history.sidebar.add-image"}}</button>
         <button data-action="addFolder"><i class="fas fa-folder-plus"></i></button>
+        <button class="icon-button active" data-action="createMime" title="{{localize 'echoes-of-history.sidebar.add-mime'}}">
+            <i class="fas fa-user-plus"></i>
+        </button>
     </header>
 
     <ul class="image-list directory-list">
@@ -9,4 +12,11 @@
             {{> directoryItem this}}
         {{/each}}
     </ul>
+    {{#if isTheatreActive}}
+        <footer class="theatre-control-panel">
+            <button type="button" class="stop-theatre-btn" data-action="closeStage">
+                <i class="fas fa-stop-circle"></i> {{localize "echoes-of-history.sidebar.stop-conversation"}}
+            </button>
+        </footer>
+    {{/if}}
 </div>

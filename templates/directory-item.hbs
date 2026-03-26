@@ -1,24 +1,35 @@
-<li class="{{#if (eq type 'folder')}}folder-item{{else}}image-item{{/if}} directory-item flexrow" data-id="{{id}}">
+<li class="directory-item flexrow {{#if (eq type 'folder')}}folder-item{{else if (eq type 'mime')}}mime-item{{else}}image-item{{/if}}"
+    data-id="{{id}}">
 
     <div class="echo-info clickable"
-         data-action="{{#if (eq type 'folder')}}toggleFolder{{else}}showImage{{/if}}"
+         data-action="{{#if (eq type 'folder')}}toggleFolder{{else if (eq type 'mime')}}showMime{{else}}showImage{{/if}}"
          title="{{localize 'echoes-of-history.sidebar.show'}}">
 
         {{#if (eq type "folder")}}
             <i class="fas {{#if expanded}}fa-folder-open{{else}}fa-folder{{/if}}" style="margin-right: 5px;"></i>
+        {{else if (eq type "mime")}}
+            <i class="fas fa-user-tie" style="margin-right: 5px; color: #a1c4fd;"></i>
         {{/if}}
 
         <span class="image-name">{{this.name}}</span>
     </div>
 
     <div class="controls flexrow">
+        {{#if (and (eq type 'folder') hasMimes)}}
+            <button class="icon-button theatre-btn"
+                    data-action="startTheatre"
+                    title="{{localize 'echoes-of-history.sidebar.start-theatre'}}">
+                <i class="fas fa-masks-theater"></i>
+            </button>
+        {{/if}}
+
         <button class="icon-button"
-                data-action="{{#if (eq type 'folder')}}editFolder{{else}}editEcho{{/if}}"
+                data-action="{{#if (eq type 'folder')}}editFolder{{else}}editEntry{{/if}}"
                 title="{{localize 'echoes-of-history.sidebar.edit'}}">
             <i class="fas fa-cog"></i>
         </button>
-        <button class="icon-button"
-                data-action="{{#if (eq type 'folder')}}deleteFolder{{else}}deleteImage{{/if}}"
+        <button class="icon-button danger"
+                data-action="{{#if (eq type 'folder')}}deleteFolder{{else}}deleteEntry{{/if}}"
                 title="{{localize 'echoes-of-history.sidebar.remove'}}">
             <i class="fas fa-trash"></i>
         </button>

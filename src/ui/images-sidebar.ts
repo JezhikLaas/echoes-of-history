@@ -1,9 +1,11 @@
 import { MODULE_ID } from "../constants";
 import { writeError, writeLog, writeWarn } from "../utils/logging";
 import { VisionEditDialog } from "./vision-edit";
-import { FolderEntry } from "../settings";
+import { FolderEntry, MimeEntry } from "../settings";
 import { FolderEditDialog } from "./folder-edit";
 import { VisionManager } from "../vision-manager";
+import { TheatreStage } from "./theatre-stage";
+import { warn } from "../utils/notifications";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -18,12 +20,15 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         actions: {
             addImage: ImagesSidebar.#onAddImage,
             showImage: ImagesSidebar.#onShowImage,
-            deleteImage: ImagesSidebar.#onDeleteImage,
-            editEcho: ImagesSidebar.#onEditVision,
+            deleteEntry: ImagesSidebar.#onDeleteEntry,
+            editEntry: ImagesSidebar.#onEditEntry,
             toggleFolder: ImagesSidebar.#onToggleFolder,
             addFolder: ImagesSidebar.#onAddFolder,
             editFolder: ImagesSidebar.#onEditFolder,
-            deleteFolder: ImagesSidebar.#onDeleteFolder
+            deleteFolder: ImagesSidebar.#onDeleteFolder,
+            startTheatre: ImagesSidebar.#onStartTheatre,
+            createMime: ImagesSidebar.#onCreateMime,
+            closeStage: ImagesSidebar.#onCloseStage
         }
     };
 
@@ -59,14 +64,12 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     static #onShowImage(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
-        const row = target.closest(".image-item") as HTMLElement | null;
-        const id = row?.dataset.id;
+        const id = ImagesSidebar.getIdForEvent(target, ".image-item");
         if (id) this.broadcastShow(id);
     }
 
-    static async #onDeleteImage(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
-        const row = target.closest(".image-item") as HTMLElement | null;
-        const id = row?.dataset.id;
+    static async #onDeleteEntry(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
+        const id = ImagesSidebar.getIdForEvent(target);
         if (id) {
             const confirm = await (foundry.applications.api as any).DialogV2.confirm({
                 window: { title: game.i18n?.localize("echoes-of-history.sidebar.delete-title") },
@@ -111,15 +114,14 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     }
 
-    static async #onEditVision(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
-        const settings = game.settings as any;
-        const row = target.closest(".image-item") as HTMLElement | null;
-        const id = row?.dataset.id;
+    static async #onEditEntry(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
+        const id = ImagesSidebar.getIdForEvent(target);
         if (!id) {
             writeError("Unable to locate id to edit, exiting");
             return;
         }
 
+        const settings = game.settings as any;
         const allImages = settings.get(MODULE_ID, "imageList") as any[];
         const imageData = allImages.find(img => img.id === id);
 
@@ -172,6 +174,51 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         await new FolderEditDialog(newFolder, { isNew: true }).render({ force: true });
     }
 
+    static async #onStartTheatre(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
+        const row = target.closest(".folder-item") as HTMLElement | null;
+        const folderId = row?.dataset.id;
+        if (!folderId) return;
+        const allEntries = (game.settings as any).get(MODULE_ID, "imageList") as any[] || [];
+        const ensemble = allEntries.filter(e =>
+            e.type === "mime" && e.parentId === folderId
+        );
+
+        if (ensemble.length === 0) {
+            warn("echoes-of-history.folders.no-mimes");
+            return;
+        }
+        writeLog(`Starting conversation with ${ensemble.length} mimes.`);
+
+        TheatreStage.startConversation(ensemble);
+    }
+
+    static async #onCreateMime(this: ImagesSidebar, _event: PointerEvent, _target: HTMLElement) {
+        await new FilePicker({
+            type: "image",
+            displayMode: "tiles",
+            callback: async (path: string) => {
+                const filename = path.split("/").pop()?.split(".")[0] || "New Mime";
+
+                const newMime: MimeEntry = {
+                    type: "mime",
+                    id: foundry.utils.randomID(),
+                    path: path,
+                    name: filename,
+                    parentId: null,
+                    onEnterExecute: { type: "none" }, // Noble "None"-Default
+                    onExitExecute: { type: "none" }
+                };
+
+                const settings = game.settings as any;
+                const allEntries = settings.get(MODULE_ID, "imageList") as any[] || [];
+                allEntries.push(newMime);
+                await settings.set(MODULE_ID, "imageList", allEntries);
+
+                await this.render({ force: true });
+            }
+        }).browse();
+    }
+
     static async #onEditFolder(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
         const row = target.closest(".folder-item") as HTMLElement | null;
         const id = row?.dataset.id;
@@ -182,6 +229,12 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
 
         if (folder) {
             await new FolderEditDialog(folder).render({force: true});
+        }
+    }
+
+    static async #onCloseStage(this: TheatreStage, _event: PointerEvent, target: HTMLElement) {
+        if ((ui as any).theatreStage) {
+            await (ui as any).theatreStage.close();
         }
     }
 
@@ -244,7 +297,8 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         const sanitizedEntries = allEntries.map(e => ({
             ...e,
             type: e.type || "vision",
-            parentId: e.parentId || null
+            parentId: e.parentId || null,
+            isTheatreActive: TheatreStage.isActive
         }));
 
         const buildTree = (parentId: string | null = null): any[] => {
@@ -252,15 +306,25 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
                 .filter(e => e.parentId === parentId)
                 .map(e => {
                     if (e.type === "folder") {
-                        return { ...e, children: buildTree(e.id) };
+                        const children = buildTree(e.id);
+                        const hasMimes = children.some(child => child.type === "mime");
+                        return {
+                            ...e,
+                            children: children,
+                            hasMimes: hasMimes
+                        };
                     }
                     return e;
-                });
-        };
+                });        };
 
         return {
             tree: buildTree(null)
         };
+    }
+
+    private static getIdForEvent(target: HTMLElement, selector: string = ".image-item, .mime-item"): string | undefined {
+        const row = target.closest(selector) as HTMLElement | null;
+        return row?.dataset.id;
     }
 
     private async _addImage(path: string) {

@@ -121,4 +121,14 @@ export interface FolderEntry {
     expanded: boolean;
 }
 
-export type SidebarEntry = FolderEntry | VisionEntry;
+export interface MimeEntry {
+    type: "mime"
+    id: string;
+    path: string;
+    name: string;
+    parentId: string | null;
+    onEnterExecute: MacroEntry;
+    onExitExecute: MacroEntry;
+}
+
+export type SidebarEntry = FolderEntry | VisionEntry | MimeEntry;

@@ -6,8 +6,14 @@ interface SidebarInstanceEntry {
 export class SidebarIntegration {
     private static instances: SidebarInstanceEntry[] = [];
 
-    public static initialize(tabId: string, options: { icon: string, title: string, appClass: any }) {
+    public static initialize(tabId: string, options: { icon: string, title: string, appClass: any, gmOnly: boolean }) {
         Hooks.on("renderSidebar", (_app: any, html: HTMLElement) => {
+            if (options.gmOnly) {
+                if (!game.user?.isGM) {
+                    return;
+                }
+            }
+
             const $html = $(html);
             const $tabs = $html.find("#sidebar-tabs");
             if ($tabs.find(`[data-tab="${tabId}"]`).length > 0) return;

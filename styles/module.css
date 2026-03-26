@@ -1,3 +1,16 @@
+@keyframes mime-materialize {
+    0% {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+        filter: blur(10px) brightness(2);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0) brightness(1);
+    }
+}
+
 .vision-edit-container .section-divider {
     display: flex;
     align-items: center;
@@ -153,7 +166,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
+    width: calc(100vw - 300px);
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.8);
     display: flex;
@@ -254,4 +267,118 @@
     border-color: #ff6400;
     color: #fff;
     box-shadow: 0 0 10px rgba(255, 100, 0, 0.2);
+}
+
+#theatre-stage {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 20000;
+    display: flex;
+    background: rgba(0, 0, 0, 0.3);
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 5vh;
+}
+
+.mimes-ensemble {
+    display: flex;
+    gap: 40px;
+    align-items: flex-end;
+    pointer-events: auto;
+}
+
+.mime-actor {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: grayscale(0.4) brightness(0.7) blur(1px);
+    transform: scale(0.9);
+}
+
+.is-opening .mime-actor {
+    opacity: 0;
+    animation: mime-materialize 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mime-actor:nth-child(1) { animation-delay: 0.5s; }
+.mime-actor:nth-child(2) { animation-delay: 1.0s; }
+.mime-actor:nth-child(3) { animation-delay: 1.5s; }
+.mime-actor:nth-child(4) { animation-delay: 2.0s; }
+
+.mime-img {
+    max-height: 60vh;
+    width: auto;
+    display: block;
+    mask-image: linear-gradient(to top, transparent 0%, black 15%);
+}
+
+.mime-actor.is-active {
+    filter: grayscale(0) brightness(1.1) blur(0);
+    transform: scale(1.1) translateY(-20px);
+    z-index: 10;
+}
+
+.mime-name {
+    font-family: "Signika", sans-serif;
+    color: white;
+    text-shadow: 0 0 10px black;
+    font-size: 1.5rem;
+    display: block;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mime-actor.is-active .mime-name {
+    opacity: 1;
+}
+
+.mime-actor:hover .remove-mime-btn {
+    opacity: 1;
+}
+
+.remove-mime-btn {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    z-index: 20;
+    background: #c0392b;
+    color: white;
+    border: 1px solid #7f0d0d;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0; /* Standardmäßig unsichtbar */
+    transition: opacity 0.2s ease;
+}
+
+.theatre-controls {
+    position: absolute;
+    top: 20px;
+    right: 320px;
+    pointer-events: all;
+}
+
+.close-stage-btn {
+    background: rgba(0, 0, 0, 0.6);
+    color: #f1c40f;
+    border: 1px solid #f1c40f;
+    padding: 5px 15px;
+    font-family: "Signika", sans-serif;
+    cursor: pointer;
+}
+
+.theatre-btn i {
+    color: #f1c40f;
+    text-shadow: 0 0 5px rgba(241, 196, 15, 0.5);
+}
+
+.theatre-btn:hover i {
+    color: #fff;
+    filter: drop-shadow(0 0 8px #f1c40f);
 }

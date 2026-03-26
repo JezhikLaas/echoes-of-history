@@ -49,11 +49,15 @@
     },
     "sidebar": {
       "title": "Fade in images",
-      "add_image": "Add image",
+      "add-image": "Add image",
+      "add-mime": "Add mime",
       "show": "Fad in",
       "remove": "Delete",
       "delete-title": "Delete image",
       "delete-text": "Really remove image from the list?"
+    },
+    "theatre": {
+      "close-stage": "Close conversation"
     },
     "folders": {
       "new-folder": "New Folder",
@@ -63,7 +67,8 @@
       "delete-text": "Really remove the folder from the list?",
       "name-label": "Name",
       "save-button": "Save",
-      "edit-title": "Edit Folder"
+      "edit-title": "Edit Folder",
+      "no-mimes": "This folder does not contain an ensemble."
     },
     "validation": {
       "macro-required": "Macro required",

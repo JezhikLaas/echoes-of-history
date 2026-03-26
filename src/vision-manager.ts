@@ -2,6 +2,7 @@ import { MODULE_ID, SOCKET_NAME } from "./constants";
 import { VisionEntry } from "./settings";
 import {writeLog, writeWarn} from "./utils/logging";
 import {CineasticScenes} from "./api/cineastic-scenes";
+import {SocketDispatcher} from "./socket-dispatcher";
 
 export class VisionManager {
     public static initialize() {
@@ -18,15 +19,19 @@ export class VisionManager {
         writeLog("Restoring active vision after refresh");
         VisionManager.showOverlayLocally(undefined, true);
 
-        writeLog(`Socket Listener wird registriert auf: ${SOCKET_NAME}`);
-
-        game.socket?.on(SOCKET_NAME, async (data: any) => {
+        SocketDispatcher.register("showImage", async (data: any) => {
             const overlayElement = document.getElementById("cine-show-overlay");
             const imgElement = document.getElementById("cine-show-image") as HTMLImageElement;
 
-            if (data.action === "showImage" && overlayElement && imgElement) {
+            if (overlayElement && imgElement) {
                 await VisionManager.showVision(data.id);
-            } else if (data.action === "hideImage" && overlayElement) {
+            }
+        });
+        SocketDispatcher.register("hideImage", async () => {
+            const overlayElement = document.getElementById("cine-show-overlay");
+            const imgElement = document.getElementById("cine-show-image") as HTMLImageElement;
+
+            if (overlayElement) {
                 await VisionManager.hideVision();
             }
         });

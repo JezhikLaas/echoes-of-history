@@ -49,12 +49,16 @@
     },
     "sidebar": {
       "title": "Bilder einblenden",
-      "add_image": "Hinzufügen",
+      "add-image": "Bild hinzufügen",
+      "add-mime": "Mime hinzufügen",
       "show": "Einblenden",
       "remove": "Löschen",
       "new_image": "Neues Bild",
       "delete-title": "Bild löschen",
       "delete-text": "Soll das Bild wirklich aus der Liste entfernt werden?"
+    },
+    "theatre": {
+      "close-stage": "Unterhaltung beenden"
     },
     "folders": {
       "new-folder": "Neuer Ordner",
@@ -64,7 +68,8 @@
       "delete-text": "Soll der Ordner wirklich entfernt werden?",
       "name-label": "Name",
       "save-button": "Speichern",
-      "edit-title": "Ordner bearbeiten"
+      "edit-title": "Ordner bearbeiten",
+      "no-mimes": "Dieser Ordner enthält keine Mimen für eine Unterhaltung."
     },
     "validation": {
       "macro-required": "Makro erforderlich",

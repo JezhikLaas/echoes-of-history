@@ -55,8 +55,6 @@ export class VisionManager {
         this.showOverlayLocally(entry);
     }
 
-
-
     public static async hideVision() {
         if (!this.activeId) return;
 

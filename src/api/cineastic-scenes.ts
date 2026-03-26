@@ -7,6 +7,12 @@ export class CineasticScenes {
 
     public static get<T>(key: string): T | undefined {
         return this.state[key] as T;
+
+    }
+
+    public static registerInterval(key: string, value: any): void {
+        const registerKey = key + "__interval";
+        this.state[registerKey] = value;
     }
 
     public static stopInterval(key: string = "activeInterval"): void {

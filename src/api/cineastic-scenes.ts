@@ -12,6 +12,7 @@ export class CineasticScenes {
 
     public static registerInterval(key: string, value: any): void {
         const registerKey = key + "__interval";
+        this.stopInterval(registerKey);
         this.state[registerKey] = value;
     }
 
@@ -28,5 +29,10 @@ export class CineasticScenes {
                 this.stopInterval(key);
             }
         });
+    }
+
+    public static resetState(): void {
+        this.clearAllIntervals();
+        this.state = {};
     }
 }

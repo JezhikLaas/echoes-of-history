@@ -1,6 +1,7 @@
 import { MODULE_ID, SOCKET_NAME } from "./constants";
 import { VisionEntry } from "./settings";
 import {writeLog, writeWarn} from "./utils/logging";
+import {CineasticScenes} from "./api/cineastic-scenes";
 
 export class VisionManager {
     public static initialize() {
@@ -63,6 +64,7 @@ export class VisionManager {
             if (entry) {
                 await this.executeVisionMacro(entry, entry.fadeOutExecute);
             }
+            CineasticScenes.resetState();
 
             game.socket?.emit(SOCKET_NAME, { action: "hideImage" });
             await this.setActiveId(null);

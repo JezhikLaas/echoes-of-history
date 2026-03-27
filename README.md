@@ -39,14 +39,14 @@ Bring your NPCs and heroes to the spotlight with a dedicated ensemble overlay.
 - **Ensemble Display:** Show up to 4 "Mimes" simultaneously over any Vision or Map.
 - **Dynamic Spotlight:** Focus on the active speaker with a "noble" glow and scaling effect.
 - **Visibility Toggle:** Prepare actors in the background and reveal them only when the drama peaks.
-- **Drag & Drop Recruitment:** Effortlessly pull characters from the *World & Campaign Builder* directly onto the stage. (Under construction)
+- **Drag & Drop Recruitment:** Effortlessly pull characters from the *World & Campaign Builder* directly onto the stage.
 - **Regiepult Integration:** A dedicated control panel in your sidebar to manage the show and close the curtain.
 
 ------
 
 ## 🧪 Automation & Macros
 
-The heart of the system is the **Automation Hook**. Every Vision and Mime (under construction) can trigger actions at specific points: **On Enter** and **On Exit**.
+The heart of the system is the **Automation Hook**. Every Vision and Mime can trigger actions at specific points: **On Enter** and **On Exit**.
 
 ### The "Scope" Variable
 

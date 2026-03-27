@@ -139,12 +139,12 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
 
         if (oldActive) {
             const oldMime = TheatreStage.ensemble.find(m => m.id === oldActive);
-            if (oldMime) await MacroManager.execute(oldMime.onExitExecute);
+            if (oldMime) await MacroManager.execute(oldMime.onExitExecute, oldMime);
         }
 
         if (TheatreStage.activeMimeId) {
             const newMime = TheatreStage.ensemble.find(m => m.id === TheatreStage.activeMimeId);
-            if (newMime) await MacroManager.execute(newMime.onEnterExecute);
+            if (newMime) await MacroManager.execute(newMime.onEnterExecute, newMime);
         }
 
         game.socket?.emit(`module.${MODULE_ID}`, {

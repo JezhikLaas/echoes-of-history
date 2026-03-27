@@ -58,7 +58,8 @@
       "delete-text": "Really remove image from the list?",
       "stop-conversation": "Close conversation",
       "switch-visible": "Toggle visibility",
-      "edit": "Edit"
+      "edit": "Edit",
+      "invalid_type": "The entry \"{name}\" cannot be added to a conversation."
     },
     "folders": {
       "new-folder": "New Folder",

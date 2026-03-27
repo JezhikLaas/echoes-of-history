@@ -3,6 +3,7 @@ import { VisionEntry } from "./settings";
 import {writeLog, writeWarn} from "./utils/logging";
 import {CineasticScenes} from "./api/cineastic-scenes";
 import {SocketDispatcher} from "./socket-dispatcher";
+import {MacroManager} from "./macro-manager";
 
 export class VisionManager {
     public static initialize() {
@@ -29,7 +30,6 @@ export class VisionManager {
         });
         SocketDispatcher.register("hideImage", async () => {
             const overlayElement = document.getElementById("cine-show-overlay");
-            const imgElement = document.getElementById("cine-show-image") as HTMLImageElement;
 
             if (overlayElement) {
                 await VisionManager.hideVision();
@@ -50,7 +50,7 @@ export class VisionManager {
         if (game.user?.isGM) {
             await this.setActiveId(id);
             // We do not want to wait here
-            this.executeVisionMacro(entry, entry.fadeInExecute);
+            MacroManager.execute(entry.fadeInExecute, entry);
             game.socket?.emit(
                 SOCKET_NAME,
                 {
@@ -67,7 +67,7 @@ export class VisionManager {
         if (game.user?.isGM) {
             const entry = this.getEntryById(this.activeId)
             if (entry) {
-                await this.executeVisionMacro(entry, entry.fadeOutExecute);
+                await MacroManager.execute(entry.fadeOutExecute, entry);
             }
             CineasticScenes.resetState();
 
@@ -105,39 +105,6 @@ export class VisionManager {
         const settings = game.settings as any;
         const allImages = settings.get(MODULE_ID, "imageList") as VisionEntry[];
         return allImages.find(img => img.id === id);
-    }
-
-    private static async executeVisionMacro(entry: VisionEntry, macroData: any) {
-        if (!macroData || macroData.type === "none") return;
-
-        const mappedArgs = Object.fromEntries(
-            (macroData.arguments || []).map((a: any) => [a.key, a.value])
-        );
-
-        const scope = {
-            fadeIn: entry.fadeIn,
-            fadeOut: entry.fadeOut,
-            name: entry.name,
-            ...mappedArgs
-        };
-
-        try {
-            if (macroData.type === "inline" && macroData.macroCode) {
-                const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
-                const fn = new AsyncFunction("scope", macroData.macroCode);
-                await fn(scope);
-            }
-            else if (macroData.type === "reference" && macroData.macroId) {
-                const macro = game.macros?.get(macroData.macroId);
-                if (macro) {
-                    await (macro as any).execute(scope);
-                } else {
-                    console.warn(`${MODULE_ID} | Macro ${macroData.macroId} not found.`);
-                }
-            }
-        } catch (error) {
-            writeWarn("Error executing macro:", error)
-        }
     }
 
     public static showOverlayLocally(entry?: VisionEntry, isRefresh = false) {

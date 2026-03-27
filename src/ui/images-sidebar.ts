@@ -10,6 +10,13 @@ import { warn } from "../utils/notifications";
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
+    private readonly dragDrop: DragDrop[];
+
+    constructor(options = { }) {
+        super(options);
+        this.dragDrop = this.createDragDropHandlers();
+    }
+
     static override DEFAULT_OPTIONS = {
         id: `${MODULE_ID}-tab`,
         tag: "section",
@@ -17,6 +24,9 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         window: {
             frame: false
         },
+        dragDrop: [{
+            dropSelector: ".echoes-of-history-sidebar, .folder-item"
+        }],
         actions: {
             addImage: ImagesSidebar.#onAddImage,
             showImage: ImagesSidebar.#onShowImage,
@@ -41,6 +51,113 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             ]
         }
     };
+
+    private createDragDropHandlers(): DragDrop[] {
+        const dragDropOptions = (this.options as any).dragDrop || [];
+        return dragDropOptions.map((d : any) => {
+            d.permissions = {
+                drop: this.canDragDrop.bind(this),
+            };
+            d.callbacks = {
+                dragover: this.onDragOver.bind(this),
+                drop: this.onDrop.bind(this),
+            };
+            return new foundry.applications.ux.DragDrop(d);
+        });
+    }
+
+    private canDragDrop(info: string): boolean {
+        return !TheatreStage.isActive;
+    }
+
+    private onDragOver(event: DragEvent): void {
+        event.preventDefault();
+    }
+
+    private async onDrop(event: DragEvent): Promise<void> {
+        const target = event.target as HTMLElement;
+
+        const folderItem = target.closest(".folder-item") as HTMLElement | null;
+        let folderId: string | null = null;
+        if (folderItem) {
+            folderId = folderItem.dataset.id || null;
+        }
+
+        const sidebar = target.closest(".echoes-of-history-sidebar");
+        if (!sidebar) {
+            writeWarn("Unable to determine target");
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const raw = event.dataTransfer?.getData("text/plain");
+        if (!raw) return;
+
+        let data: any;
+        try {
+            data = JSON.parse(raw);
+        } catch {
+            writeError("Unable to parse dropped object from Json");
+            return;
+        }
+
+        if (data.type !== "JournalEntry" || !data.fcbData) return;
+
+        if (data.fcbData.topic !== 1 && data.fcbData.topic !== 4) {
+            warn("echoes-of-history.sidebar.invalid_type", {
+                name: data.fcbData.name
+            });
+
+            return;
+        }
+
+        const uuid = data.uuid ?? data.fcbData?.childId;
+        if (!uuid) {
+            writeWarn("Unable to extract uuid", data);
+            return;
+        }
+
+        let img = "icons/svg/mystery-man.svg";
+        try {
+            const doc = await (fromUuid as any)(uuid);
+            const page = doc?.pages?.contents?.[0];
+            if (page?.system?.img) {
+                img = page.system.img;
+            }
+        } catch {
+            writeWarn("Failed to fetch image for participant", uuid);
+        }
+
+        const entry: MimeEntry = {
+            type: "mime",
+            id: uuid,
+            name: data.fcbData.name ?? "Unbekannt",
+            path: img,
+            visible: true,
+            onEnterExecute: { type: "none" },
+            onExitExecute: { type: "none" },
+            parentId: folderId
+        };
+
+        const settings = game.settings as any;
+        const allEntries = settings.get(MODULE_ID, "imageList") as any[] || [];
+        allEntries.push(entry);
+        await settings.set(MODULE_ID, "imageList", allEntries);
+
+        await this.render({ force: true });
+    }
+
+    protected override async _onRender(context: any, options: any): Promise<void> {
+        await super._onRender(context, options);
+
+        if (this.dragDrop && this.element) {
+            this.dragDrop.forEach((handler) => {
+                handler.bind(this.element);
+            });
+        }
+    }
 
     public static async registerPartials() {
         const partials = {

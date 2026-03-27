@@ -59,7 +59,8 @@
       "delete-text": "Soll das Bild wirklich aus der Liste entfernt werden?",
       "stop-conversation": "Unterhaltung beenden",
       "switch-visible": "Sichtbarkeit umschalten",
-      "edit": "Bearbeiten"
+      "edit": "Bearbeiten",
+      "invalid_type": "Der Eintrag \"{name}\" kann nicht für eine Unterhaltung verwendet werden."
     },
     "folders": {
       "new-folder": "Neuer Ordner",

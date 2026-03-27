@@ -33,6 +33,24 @@
                 </label>
             </div>
         </div>
+
+        <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-fields">
+                <label>{{localize "echoes-of-history.settings.is-visible"}}
+                    <input type="checkbox" name="visible" value="{{entry.visible}}">
+                </label>
+            </div>
+        </div>
+    {{/if}}
+
+    {{#if (eq entry.type "mime")}}
+        <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-fields">
+                <label>{{localize "echoes-of-history.settings.is-visible"}}
+                    <input type="checkbox" name="visible" {{#if entry.visible}}checked{{/if}}>
+                </label>
+            </div>
+        </div>
     {{/if}}
 
     <div class="form-group" style="margin-bottom: 15px;">

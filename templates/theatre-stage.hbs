@@ -5,7 +5,8 @@
                  data-id="{{mime.id}}"
                  data-action="setSpotlight"
                  id="mime-{{mime.id}}"
-                 data-mime-id="{{mime.id}}">
+                 data-mime-id="{{mime.id}}"
+                 style="{{#unless mime.visible}}display: none;{{/unless}}">
 
                 {{#if ../isGM}}
                     <button class="remove-mime-btn"

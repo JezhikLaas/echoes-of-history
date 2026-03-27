@@ -38,7 +38,8 @@
       "macro-args-label": "Parameter",
       "add-arg-button": "Neuer Parameter",
       "section-fade-out": "Ausblenden",
-      "section-fade-in": "Einblenden"
+      "section-fade-in": "Einblenden",
+      "is-visible": "Sichtbar"
     },
     "recap": {
       "no_sections": "[{name}] Keine Recap-Abschnitte gesetzt (World Setting: recapSections)",
@@ -56,7 +57,9 @@
       "new_image": "Neues Bild",
       "delete-title": "Bild löschen",
       "delete-text": "Soll das Bild wirklich aus der Liste entfernt werden?",
-      "stop-conversation": "Unterhaltung beenden"
+      "stop-conversation": "Unterhaltung beenden",
+      "switch-visible": "Sichtbarkeit umschalten",
+      "edit": "Bearbeiten"
     },
     "folders": {
       "new-folder": "Neuer Ordner",

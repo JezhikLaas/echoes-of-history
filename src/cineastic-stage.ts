@@ -12,5 +12,8 @@ export class CineasticStageManager {
         SocketDispatcher.register("activateMime", async (data: any) => {
             await (ui as any).theatreStage.activateMime(data.active, data.inactive || null);
         });
+        SocketDispatcher.register("updateMimeVisibility", (data: any) => {
+            TheatreStage.updateMimeVisibility(data.mimeId, data.visible);
+        });
     }
 }

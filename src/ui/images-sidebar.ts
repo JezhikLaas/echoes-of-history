@@ -28,7 +28,8 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             deleteFolder: ImagesSidebar.#onDeleteFolder,
             startTheatre: ImagesSidebar.#onStartTheatre,
             createMime: ImagesSidebar.#onCreateMime,
-            closeStage: ImagesSidebar.#onCloseStage
+            closeStage: ImagesSidebar.#onCloseStage,
+            switchVisible: ImagesSidebar.#onSwitchVisible,
         }
     };
 
@@ -205,6 +206,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
                     path: path,
                     name: filename,
                     parentId: null,
+                    visible: true,
                     onEnterExecute: { type: "none" }, // Noble "None"-Default
                     onExitExecute: { type: "none" }
                 };
@@ -217,6 +219,26 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
                 await this.render({ force: true });
             }
         }).browse();
+    }
+
+    static async #onSwitchVisible(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
+        const id = ImagesSidebar.getIdForEvent(target, ".mime-item");
+        const allEntries = (game.settings as any).get(MODULE_ID, "imageList");
+        const mime = allEntries.find((e: { id: string; }) => e.id === id) as MimeEntry;
+
+        if (!mime) {
+            writeWarn("Unable to locate mime, exiting")
+            return;
+        }
+
+        mime.visible = !mime.visible;
+        const settings = game.settings as any;
+        await settings.set(MODULE_ID, "imageList", allEntries);
+
+        await this.render();
+        if (TheatreStage.isActive) {
+            TheatreStage.updateMimeVisibility(id!, mime.visible);
+        }
     }
 
     static async #onEditFolder(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {

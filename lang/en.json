@@ -38,7 +38,8 @@
       "macro-args-label": "Parameters",
       "add-arg-button": "Add Parameter",
       "section-fade-out": "Fade Out",
-      "section-fade-in": "Fade In"
+      "section-fade-in": "Fade In",
+      "is-visible": "Visible"
     },
     "recap": {
       "no_sections": "[{name}] No recap sections defined (World Setting: recapSections)",
@@ -55,7 +56,9 @@
       "remove": "Delete",
       "delete-title": "Delete image",
       "delete-text": "Really remove image from the list?",
-      "stop-conversation": "Close conversation"
+      "stop-conversation": "Close conversation",
+      "switch-visible": "Toggle visibility",
+      "edit": "Edit"
     },
     "folders": {
       "new-folder": "New Folder",

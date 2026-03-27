@@ -103,6 +103,7 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
             fadeIn: Number(data.fadeIn),
             fadeOut: Number(data.fadeOut),
             parentId: data.parentId || null,
+            visible: formData.has("visible"),
             fadeInExecute: data.fadeInExecute,
             fadeOutExecute: data.fadeOutExecute
         };
@@ -144,7 +145,7 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
 
         const entry = this.entry as any;
         entry.fadeInExecute = expanded.fadeInExecute;
-        entry.fadeInExecute.arguments = args; // Hier setzen wir das echte Array
+        entry.fadeInExecute.arguments = args;
 
         entry.fadeInExecute.arguments.splice(index, 1);
 
@@ -171,7 +172,7 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
 
         const entry = this.entry as any;
         entry.fadeOutExecute = expanded.fadeOutExecute;
-        entry.fadeOutExecute.arguments = args; // Hier setzen wir das echte Array
+        entry.fadeOutExecute.arguments = args;
 
         entry.fadeOutExecute.arguments.splice(index, 1);
 

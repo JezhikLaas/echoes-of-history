@@ -32,6 +32,26 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
         return this.ensemble?.length > 0;
     }
 
+    public static updateMimeVisibility(mimeId: string, visible: boolean) {
+        const mime = this.ensemble.find(m => m.id === mimeId);
+        if (mime) {
+            mime.visible = visible;
+        }
+
+        const el = document.getElementById(`mime-${mimeId}`);
+        if (el) {
+            el.style.display = visible ? "" : "none";
+        }
+
+        if (game.user?.isGM) {
+            game.socket?.emit(`module.${MODULE_ID}`, {
+                action: "updateMimeVisibility",
+                mimeId: mimeId,
+                visible: visible
+            });
+        }
+    }
+
     protected override async _prepareContext(_options: any): Promise<any> {
         return {
             ensemble: (this.constructor as typeof TheatreStage).ensemble,

@@ -201,10 +201,10 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
         if (!data.name || data.name.trim() === "") {
             errors.push(game.i18n?.localize("echoes-of-history.validation.name-required") || "name required");
         }
-        if (isNaN(data.fadeIn) || data.fadeIn < 0) {
+        if (data.type == "vision" && (isNaN(data.fadeIn) || data.fadeIn < 0)) {
             errors.push(game.i18n?.localize("echoes-of-history.validation.fade-in-positive") || "fade in positive");
         }
-        if (isNaN(data.fadeOut) || data.fadeOut < 0) {
+        if (data.type == "vision" && (isNaN(data.fadeOut) || data.fadeOut < 0)) {
             errors.push(game.i18n?.localize("echoes-of-history.validation.fade-out-positive") || "fade out positive");
         }
         if (data.fadeInExecute?.type === "inline") {

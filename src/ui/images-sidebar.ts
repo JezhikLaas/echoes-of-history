@@ -66,7 +66,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         });
     }
 
-    private canDragDrop(info: string): boolean {
+    private canDragDrop(_info: string): boolean {
         return !TheatreStage.isActive;
     }
 

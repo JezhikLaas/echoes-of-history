@@ -10,7 +10,7 @@ export class CineasticStageManager {
             (ui as any).theatreStage?.close();
         });
         SocketDispatcher.register("activateMime", async (data: any) => {
-            await (ui as any).theatreStage.activateMime(data.active, null);
+            await (ui as any).theatreStage.activateMime(data.active, data.inactive || null);
         });
     }
 }

@@ -1,13 +1,11 @@
 @keyframes mime-materialize {
     0% {
         opacity: 0;
-        transform: translateY(50px) scale(0.95);
-        filter: blur(10px) brightness(2);
+        transform: scale(0.7) translateY(100px);
     }
     100% {
         opacity: 1;
-        transform: translateY(0) scale(1);
-        filter: blur(0) brightness(1);
+        transform: scale(0.9) translateY(0);
     }
 }
 
@@ -157,11 +155,6 @@
     letter-spacing: 0.08em;
 }
 
-/* falls noch vorhanden, aber ungenutzt */
-.eoh-recap-counter {
-    display: none;
-}
-
 #cine-show-overlay {
     position: fixed;
     top: 0;
@@ -203,6 +196,30 @@
     pointer-events: auto;
 }
 
+#echoes-of-history-sidebar.tab.active {
+    display: flex;
+    flex-direction: column;
+}
+
+#echoes-of-history-sidebar.tab.active .echoes-of-history-app-shell {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+}
+
+.echoes-of-history-sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.echoes-of-history-sidebar .image-list {
+    flex: 1;
+    overflow-y: auto;
+}
+
 #echoes-of-history-sidebar.tab {
     display: none;
     background: #1a1a1a;
@@ -210,48 +227,9 @@
     height: 100%;
     border-left: 1px solid #444;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
-    overflow: hidden; /* Verhindert hässliche Scrollbars außerhalb des Containers */
+    overflow: hidden;
 }
 
-#echoes-of-history-sidebar.tab.active {
-    display: flex;
-    flex-direction: column;
-}
-
-.echoes-header-breadcrumb {
-    padding: 10px 15px;
-    background: #111;
-    border-bottom: 1px solid #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.echoes-header-breadcrumb .breadcrumb-text {
-    font-family: "Modesto Condensed", "Signika", sans-serif;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-size: 0.9rem;
-    color: #ff6400; /* Das typische WCB-Orange/Gold */
-    font-weight: bold;
-}
-
-.echoes-header-breadcrumb .breadcrumb-separator {
-    margin: 0 8px;
-    color: #666;
-}
-
-/* Die Inhalts-Area */
-.echoes-of-history-container {
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    flex: 1;
-    overflow-y: auto;
-}
-
-/* Buttons im WCB-Stil (massiv und flach) */
 #echoes-of-history-sidebar button {
     background: #2a2a2a;
     color: #ccc;
@@ -290,10 +268,16 @@
 
 .mime-actor {
     position: relative;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    filter: grayscale(0.4) brightness(0.7) blur(1px);
-    transform: scale(0.9);
+    transition: opacity 0.5s ease;
+    z-index: 1;
+}
+
+.mime-portrait-frame {
+    transform: scale(0.9) translateY(0);
+    filter: grayscale(0.5) brightness(0.6) blur(2px);
+    transition:
+            transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+            filter 0.5s ease;
 }
 
 .is-opening .mime-actor {
@@ -313,10 +297,14 @@
     mask-image: linear-gradient(to top, transparent 0%, black 15%);
 }
 
+.mime-actor.is-active .mime-portrait-frame {
+    transform: scale(1.5) translateY(-30px);
+    filter: grayscale(0) brightness(1.2) blur(0);
+    z-index: 100;
+}
 .mime-actor.is-active {
-    filter: grayscale(0) brightness(1.1) blur(0);
-    transform: scale(1.1) translateY(-20px);
-    z-index: 10;
+    opacity: 1;
+    z-index: 100;
 }
 
 .mime-name {
@@ -364,15 +352,6 @@
     pointer-events: all;
 }
 
-.close-stage-btn {
-    background: rgba(0, 0, 0, 0.6);
-    color: #f1c40f;
-    border: 1px solid #f1c40f;
-    padding: 5px 15px;
-    font-family: "Signika", sans-serif;
-    cursor: pointer;
-}
-
 .theatre-btn i {
     color: #f1c40f;
     text-shadow: 0 0 5px rgba(241, 196, 15, 0.5);
@@ -381,4 +360,28 @@
 .theatre-btn:hover i {
     color: #fff;
     filter: drop-shadow(0 0 8px #f1c40f);
+}
+
+.theatre-control-panel {
+    margin-top: auto;
+    padding: 8px;
+    border-top: 1px solid #444;
+    background: #111;
+}
+
+.theatre-control-panel .stop-theatre-btn {
+    width: 100%;
+    background: #5a1a1a;
+    color: #f0c0c0;
+    border: 1px solid #7f0d0d;
+    padding: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+
+.theatre-control-panel .stop-theatre-btn:hover {
+    background: #7f2020;
+    border-color: #c0392b;
+    color: #fff;
 }

@@ -52,39 +52,6 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
         await this.activateMime(mimeId, oldMimeId)
     }
 
-    public async activateMime(newActive: string | undefined, oldActive: string | null) {
-        TheatreStage.isOpening = false;
-
-        if (TheatreStage.activeMimeId === newActive) {
-            TheatreStage.activeMimeId = null;
-        } else {
-            TheatreStage.activeMimeId = newActive || null;
-        }
-
-        if (!game.user?.isGM) {
-            await this.render({ force: false });
-            return;
-        }
-
-        if (oldActive) {
-            const oldMime = TheatreStage.ensemble.find(m => m.id === oldActive);
-            if (oldMime) await MacroManager.execute(oldMime.onExitExecute);
-        }
-
-        if (TheatreStage.activeMimeId) {
-            const newMime = TheatreStage.ensemble.find(m => m.id === TheatreStage.activeMimeId);
-            if (newMime) await MacroManager.execute(newMime.onEnterExecute);
-        }
-
-        game.socket?.emit(`module.${MODULE_ID}`, {
-            action: "activateMime",
-            active: TheatreStage.activeMimeId
-        });
-
-
-        await this.render({ force: false });
-    }
-
     static async #onRemoveMime(this: TheatreStage, _event: PointerEvent, target: HTMLElement) {
         const mimeId = target.dataset.mimeId;
         const currentEnsemble = (this.constructor as typeof TheatreStage).ensemble;
@@ -100,13 +67,7 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     static async #onCloseStage(this: TheatreStage, _event: PointerEvent, _target: HTMLElement) {
-        TheatreStage.ensemble = [];
-        if (game.user?.isGM) {
-            game.socket?.emit(`module.${MODULE_ID}`, {
-                action: "closeStage"
-            });
-        }
-        await this.close();
+        await TheatreStage.closeConversation(this);
     }
 
     public static startConversation(nscEntries: any[], broadcast: boolean = true) {
@@ -116,13 +77,85 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
 
         const hud = (ui as any).theatreStage || new TheatreStage();
         (ui as any).theatreStage = hud;
-        hud.render({ force: true });
+        hud.render({ force: true }).then(() => {
+            setTimeout(() => {
+                const el = document.getElementById("theatre-stage");
+                if (el) el.classList.remove("is-opening");
+            }, 2000);
+        })
 
         if (broadcast && game.user?.isGM) {
             game.socket?.emit(`module.${MODULE_ID}`, {
                 action: "openStage",
                 ensemble: this.ensemble
             });
+        }
+    }
+
+    public static async closeConversation(instance: TheatreStage) {
+        TheatreStage.ensemble = [];
+        if (game.user?.isGM) {
+            game.socket?.emit(`module.${MODULE_ID}`, {
+                action: "closeStage"
+            });
+        }
+        await instance.close();
+    }
+
+    public async activateMime(newActive: string | undefined, oldActive: string | null) {
+        TheatreStage.isOpening = false;
+
+        if (TheatreStage.activeMimeId === newActive) {
+            TheatreStage.activeMimeId = null;
+        } else {
+            TheatreStage.activeMimeId = newActive || null;
+        }
+
+        this.applySpotlightToDOM(oldActive, TheatreStage.activeMimeId);
+
+        if (!game.user?.isGM) {
+            return;
+        }
+
+        if (oldActive) {
+            const oldMime = TheatreStage.ensemble.find(m => m.id === oldActive);
+            if (oldMime) await MacroManager.execute(oldMime.onExitExecute);
+        }
+
+        if (TheatreStage.activeMimeId) {
+            const newMime = TheatreStage.ensemble.find(m => m.id === TheatreStage.activeMimeId);
+            if (newMime) await MacroManager.execute(newMime.onEnterExecute);
+        }
+
+        game.socket?.emit(`module.${MODULE_ID}`, {
+            action: "activateMime",
+            active: TheatreStage.activeMimeId,
+            inactive: oldActive
+        });
+    }
+
+    private applySpotlightToDOM(oldId: string | null, newId: string | null) {
+        if (oldId) {
+            const oldEl = document.getElementById(`mime-${oldId}`);
+            if (oldEl) {
+                oldEl.classList.remove("is-active");
+                const frame = oldEl.querySelector<HTMLElement>(".mime-portrait-frame");
+                if (frame) {
+                    frame.style.transform = "scale(0.9) translateY(0)";
+                    frame.style.filter = "grayscale(0.5) brightness(0.6) blur(2px)";
+                }
+            }
+        }
+        if (newId) {
+            const newEl = document.getElementById(`mime-${newId}`);
+            if (newEl) {
+                newEl.classList.add("is-active");
+                const frame = newEl.querySelector<HTMLElement>(".mime-portrait-frame");
+                if (frame) {
+                    frame.style.transform = "scale(1.1) translateY(-30px)";
+                    frame.style.filter = "grayscale(0) brightness(1.2) blur(0)";
+                }
+            }
         }
     }
 }

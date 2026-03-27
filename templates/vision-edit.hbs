@@ -15,19 +15,21 @@
         </div>
     </div>
 
-    <div class="form-group" style="margin-bottom: 15px;">
-        <div class="form-fields">
-            <label>{{localize "echoes-of-history.settings.fade-in-label"}}</label>
-            <input type="number" name="fadeIn" value="{{entry.fadeIn}}" min="0" step="100">
+    {{#if (ne entry.type "mime")}}
+        <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-fields">
+                <label>{{localize "echoes-of-history.settings.fade-in-label"}}</label>
+                <input type="number" name="fadeIn" value="{{entry.fadeIn}}" min="0" step="100">
+            </div>
         </div>
-    </div>
 
-    <div class="form-group" style="margin-bottom: 15px;">
-        <div class="form-fields">
-            <label>{{localize "echoes-of-history.settings.fade-out-label"}}</label>
-            <input type="number" name="fadeOut" value="{{entry.fadeOut}}" min="0" step="100">
+        <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-fields">
+                <label>{{localize "echoes-of-history.settings.fade-out-label"}}</label>
+                <input type="number" name="fadeOut" value="{{entry.fadeOut}}" min="0" step="100">
+            </div>
         </div>
-    </div>
+    {{/if}}
 
     <div class="form-group" style="margin-bottom: 15px;">
         <label style="flex: 1;">{{localize "echoes-of-history.settings.folder-label"}}</label>

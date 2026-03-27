@@ -1,8 +1,10 @@
 <section class="theatre-stage-wrapper {{#if isOpening}}is-opening{{/if}}">
     <div class="mimes-ensemble">
         {{#each ensemble as |mime|}}
-            <div class="mime-actor {{#if (eq mime.id ../activeMimeId)}}is-active{{/if}}"
+            <div class="mime-actor  {{#if (eq mime.id ../activeMimeId)}}is-active{{/if}}"
+                 data-id="{{mime.id}}"
                  data-action="setSpotlight"
+                 id="mime-{{mime.id}}"
                  data-mime-id="{{mime.id}}">
 
                 {{#if ../isGM}}
@@ -25,12 +27,4 @@
             </div>
         {{/each}}
     </div>
-
-    {{#if isGM}}
-        <div class="theatre-controls">
-            <button type="button" data-action="closeStage" title="{{localize "echoes-of-history.theatre.close-stage"}}">
-                <i class="fa-solid fa-rectangle-xmark"></i>
-            </button>
-        </div>
-    {{/if}}
 </section>

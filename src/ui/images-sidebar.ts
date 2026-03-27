@@ -141,7 +141,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
                 writeError("Image entry vanished during edit, not updating anything");
             }
         });
-        dialog.render({ force: true });
+        await dialog.render({ force: true });
     }
 
     static async #onToggleFolder(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
@@ -156,7 +156,6 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         if (index > -1) {
             allEntries[index].expanded = !allEntries[index].expanded;
 
-            // 4. Speichern und neu rendern
             await settings.set(MODULE_ID, "imageList", allEntries);
             await this.render();
         }
@@ -190,6 +189,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         writeLog(`Starting conversation with ${ensemble.length} mimes.`);
 
         TheatreStage.startConversation(ensemble);
+        await this.render();
     }
 
     static async #onCreateMime(this: ImagesSidebar, _event: PointerEvent, _target: HTMLElement) {
@@ -232,9 +232,10 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     }
 
-    static async #onCloseStage(this: TheatreStage, _event: PointerEvent, target: HTMLElement) {
+    static async #onCloseStage(this: TheatreStage, _event: PointerEvent, _target: HTMLElement) {
         if ((ui as any).theatreStage) {
-            await (ui as any).theatreStage.close();
+            await TheatreStage.closeConversation((ui as any).theatreStage);
+            await this.render();
         }
     }
 
@@ -298,12 +299,12 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             ...e,
             type: e.type || "vision",
             parentId: e.parentId || null,
-            isTheatreActive: TheatreStage.isActive
         }));
 
         const buildTree = (parentId: string | null = null): any[] => {
             return sanitizedEntries
                 .filter(e => e.parentId === parentId)
+                .sort((a, b) => a.type.localeCompare(b.type))
                 .map(e => {
                     if (e.type === "folder") {
                         const children = buildTree(e.id);
@@ -318,7 +319,8 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
                 });        };
 
         return {
-            tree: buildTree(null)
+            tree: buildTree(null),
+            isTheatreActive: TheatreStage.isActive
         };
     }
 

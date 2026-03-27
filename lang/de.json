@@ -55,10 +55,8 @@
       "remove": "Löschen",
       "new_image": "Neues Bild",
       "delete-title": "Bild löschen",
-      "delete-text": "Soll das Bild wirklich aus der Liste entfernt werden?"
-    },
-    "theatre": {
-      "close-stage": "Unterhaltung beenden"
+      "delete-text": "Soll das Bild wirklich aus der Liste entfernt werden?",
+      "stop-conversation": "Unterhaltung beenden"
     },
     "folders": {
       "new-folder": "Neuer Ordner",

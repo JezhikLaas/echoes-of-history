@@ -7,6 +7,15 @@ A cinematic **storytelling and atmosphere** module for [Foundry VTT](https://fou
 Designed to bridge the distance in remote play with pure immersion, whether through atmospheric recaps, high-impact "Visions", or the new interactive **Theatre of Mimes**.
 
 ------
+## 🕊️ Transparency & Integrity
+Noble be man, helpful and good.
+
+This module is a product of modern engineering and radical honesty. As a backend developer, my strength lies in the logic, the architecture, and the "gears" behind the curtain. However, to bring the visual magic of this module to life, I collaborated with AI (Gemini & Claude) to polish the CSS and other UI elements.
+
+Why is this not on the official Marketplace?
+In March 2026, Foundry VTT introduced strict guidelines regarding AI-assisted development for official listings. Rather than obscuring the collaborative nature of this project to fit those rules, I have chosen transparency over visibility.
+
+Every line of code has been reviewed, understood, and refined by me to ensure it meets the highest standards of stability and immersion. This module exists outside the official directory because its creator values integrity more than a marketplace badge.
 
 ## 🌟 Features
 
@@ -75,6 +84,7 @@ Click the **Theatre Icon** in the sidebar.
 - **Layered Immersion:** Strict Z-Index management ensures that the Theatre always sits perfectly above your Visions and below the UI.
 
 ------
+*Remember!*
 
 **Noble be man, helpful and good.**
 

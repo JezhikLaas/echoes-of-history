@@ -1,4 +1,5 @@
 <div class="vision-edit-container" style="padding: 12px;">
+    <input type="hidden" name="type" value="{{entry.type}}">
     <div class="form-group" style="margin-bottom: 15px;">
         <div class="form-fields">
             <label>{{localize "echoes-of-history.settings.path-label"}}
@@ -30,14 +31,6 @@
             <div class="form-fields">
                 <label>{{localize "echoes-of-history.settings.fade-out-label"}}
                     <input type="number" name="fadeOut" value="{{entry.fadeOut}}" min="0" step="100">
-                </label>
-            </div>
-        </div>
-
-        <div class="form-group" style="margin-bottom: 15px;">
-            <div class="form-fields">
-                <label>{{localize "echoes-of-history.settings.is-visible"}}
-                    <input type="checkbox" name="visible" value="{{entry.visible}}">
                 </label>
             </div>
         </div>

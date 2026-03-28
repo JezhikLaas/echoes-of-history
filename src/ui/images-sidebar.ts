@@ -1,7 +1,7 @@
 import { MODULE_ID } from "../constants";
 import { writeError, writeLog, writeWarn } from "../utils/logging";
 import { VisionEditDialog } from "./vision-edit";
-import { FolderEntry, MimeEntry } from "../settings";
+import {FolderEntry, MimeEntry, VisionEntry} from "../settings";
 import { FolderEditDialog } from "./folder-edit";
 import { VisionManager } from "../vision-manager";
 import { TheatreStage } from "./theatre-stage";
@@ -472,12 +472,16 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         const settings = game.settings as any;
         const currentList = settings?.get(MODULE_ID, "imageList") as any[];
         const name = path.split('/').pop()?.replace(/\.[^/.]+$/, "") || game.i18n?.format("echoes-of-history.sidebar.new_image");
-        const newVision = {
+        const newVision: VisionEntry = {
             id: foundry.utils.randomID(),
+            type: "vision",
             path: path,
-            name: name,
+            name: name || "Unbekannt",
+            parentId: null,
             fadeIn: settings.get(MODULE_ID, "echoFadeIn"),
-            fadeOut: settings.get(MODULE_ID, "echoFadeOut")
+            fadeOut: settings.get(MODULE_ID, "echoFadeOut"),
+            fadeInExecute: { type: "none" },
+            fadeOutExecute: { type: "none" }
         };
 
         await settings.set(MODULE_ID, "imageList", [...currentList, newVision]);

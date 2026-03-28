@@ -108,7 +108,6 @@ export interface VisionEntry {
     name: string;
     fadeIn: number;
     fadeOut: number;
-    visible: boolean;
     parentId: string | null;
     fadeInExecute: MacroEntry;
     fadeOutExecute: MacroEntry;

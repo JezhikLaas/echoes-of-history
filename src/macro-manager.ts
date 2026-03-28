@@ -33,8 +33,9 @@ export class MacroManager {
     }
 
     private static createScope(data: DataEntry, parameters: { key: string, value: string }[]): any {
+        const parametersToMap = parameters || [];
         const mappedArgs = Object.fromEntries(
-            (parameters).map((a: any) => [a.key, a.value])
+            (parametersToMap).map((a: any) => [a.key, a.value])
         );
         switch (data.type) {
             case "mime":

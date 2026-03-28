@@ -115,6 +115,13 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
             updated.fadeOutExecute.arguments = Object.values(updated.fadeOutExecute.arguments);
         }
 
+        if (updated.fadeInExecute?.type === "reference" && !updated.fadeInExecute.arguments) {
+            updated.fadeInExecute.arguments = [];
+        }
+        if (updated.fadeOutExecute?.type === "reference" && !updated.fadeOutExecute.arguments) {
+            updated.fadeOutExecute.arguments = [];
+        }
+
         const validation = this.validate(data);
         if (!validation.valid) {
             validation.errors.forEach(error => warn(error));

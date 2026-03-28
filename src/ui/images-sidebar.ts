@@ -131,10 +131,24 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             writeWarn("Failed to fetch image for participant", uuid);
         }
 
+        const name = data.fcbData.name
+            ? data.fcbData.typeName
+                ? data.fcbData.name + " (" + data.fcbData.typeName + ")"
+                : data.fcbData.name
+            : "Unknown";
+
+        const settings = game.settings as any;
+        const allEntries = settings.get(MODULE_ID, "imageList") as any[] || [];
+
+        if (allEntries.find(m => m.id == uuid)) {
+            warn("echoes-of-history.sidebar.already-added", { name: name });
+            return;
+        }
+
         const entry: MimeEntry = {
             type: "mime",
             id: uuid,
-            name: data.fcbData.name ?? "Unbekannt",
+            name: name,
             path: img,
             visible: true,
             onEnterExecute: { type: "none" },
@@ -142,8 +156,6 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             parentId: folderId
         };
 
-        const settings = game.settings as any;
-        const allEntries = settings.get(MODULE_ID, "imageList") as any[] || [];
         allEntries.push(entry);
         await settings.set(MODULE_ID, "imageList", allEntries);
 

@@ -60,7 +60,8 @@
       "stop-conversation": "Unterhaltung beenden",
       "switch-visible": "Sichtbarkeit umschalten",
       "edit": "Bearbeiten",
-      "invalid_type": "Der Eintrag \"{name}\" kann nicht für eine Unterhaltung verwendet werden."
+      "invalid_type": "Der Eintrag \"{name}\" kann nicht für eine Unterhaltung verwendet werden.",
+      "already-added": "Der Eintrag \"{name}\" ist bereits Teil der Liste."
     },
     "folders": {
       "new-folder": "Neuer Ordner",

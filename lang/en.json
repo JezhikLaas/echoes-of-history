@@ -59,7 +59,8 @@
       "stop-conversation": "Close conversation",
       "switch-visible": "Toggle visibility",
       "edit": "Edit",
-      "invalid_type": "The entry \"{name}\" cannot be added to a conversation."
+      "invalid_type": "The entry \"{name}\" cannot be added to a conversation.",
+      "already-added": "The entry \"{name}\" is already part of the list."
     },
     "folders": {
       "new-folder": "New Folder",

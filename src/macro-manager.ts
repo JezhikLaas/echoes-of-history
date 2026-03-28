@@ -25,6 +25,7 @@ export class MacroManager {
                     return;
                 }
                 default:
+                    writeError("Unknown type for macro");
                     macroEntry satisfies never;
             }
         }
@@ -33,26 +34,27 @@ export class MacroManager {
         }
     }
 
-    private static createScope(data: DataEntry, parameters: { key: string, value: string }[]): any {
+    private static createScope(origin: DataEntry, parameters: { key: string, value: string }[]): any {
         const parametersToMap = parameters || [];
         const mappedArgs = Object.fromEntries(
             (parametersToMap).map((a: any) => [a.key, a.value])
         );
-        switch (data.type) {
+        switch (origin.type) {
             case "mime":
                 return {
-                    name: data.name,
+                    name: origin.name,
                     ...mappedArgs
                 };
             case "vision":
                 return {
-                    fadeIn: data.fadeIn,
-                    fadeOut: data.fadeOut,
-                    name: data.name,
+                    fadeIn: origin.fadeIn,
+                    fadeOut: origin.fadeOut,
+                    name: origin.name,
                     ...mappedArgs
                 };
             default:
-                data satisfies never;
+                writeError("Unknown type for origin");
+                origin satisfies never;
         }
     }
 }

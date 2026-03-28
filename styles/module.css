@@ -261,9 +261,11 @@
 
 .mimes-ensemble {
     display: flex;
-    gap: 40px;
+    gap: 1.5vw;
     align-items: flex-end;
+    justify-content: center;
     pointer-events: auto;
+    max-width: 95vw
 }
 
 .mime-actor {
@@ -285,21 +287,26 @@
     animation: mime-materialize 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-.mime-actor:nth-child(1) { animation-delay: 0.5s; }
-.mime-actor:nth-child(2) { animation-delay: 1.0s; }
-.mime-actor:nth-child(3) { animation-delay: 1.5s; }
-.mime-actor:nth-child(4) { animation-delay: 2.0s; }
+.mime-actor:nth-child(1) { animation-delay: 0.2s; }
+.mime-actor:nth-child(2) { animation-delay: 0.4s; }
+.mime-actor:nth-child(3) { animation-delay: 0.6s; }
+.mime-actor:nth-child(4) { animation-delay: 0.8s; }
+.mime-actor:nth-child(5) { animation-delay: 1.0s; }
+.mime-actor:nth-child(6) { animation-delay: 1.2s; }
+.mime-actor:nth-child(7) { animation-delay: 1.4s; }
+.mime-actor:nth-child(8) { animation-delay: 1.6s; }
 
 .mime-img {
-    max-height: 60vh;
+    max-height: 45vh;
     width: auto;
     display: block;
     mask-image: linear-gradient(to top, transparent 0%, black 15%);
+    transition: max-height 0.4s ease;
 }
 
 .mime-actor.is-active .mime-portrait-frame {
-    transform: scale(1.5) translateY(-30px);
-    filter: grayscale(0) brightness(1.2) blur(0);
+    transform: scale(1.3) translateY(-40px);
+    filter: grayscale(0) brightness(1.2) contrast(1.1) blur(0);
     z-index: 100;
 }
 .mime-actor.is-active {
@@ -310,12 +317,13 @@
 .mime-name {
     font-family: "Signika", sans-serif;
     color: white;
-    text-shadow: 0 0 10px black;
-    font-size: 1.5rem;
+    text-shadow: 0 0 8px black;
+    font-size: 1.2rem;
     display: block;
     text-align: center;
     opacity: 0;
     transition: opacity 0.3s ease;
+    margin-top: 10px;
 }
 
 .mime-actor.is-active .mime-name {

@@ -1,5 +1,5 @@
 import { MODULE_ID } from "../constants";
-import { VisionEntry } from "../settings";
+import {MacroWithPermission, VisionEntry} from "../settings";
 import { warn } from "../utils/notifications";
 
 interface VisionEditContext {
@@ -42,13 +42,11 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
         const settings = game.settings as any;
         const allEntries = (settings.get(MODULE_ID, "imageList") as any[]) || [];
 
-        const folders = allEntries
-            .filter(e => e.type === "folder")
-            .map(f => ({ id: f.id, name: f.name }));
-        const allMacros = game.macros?.contents.map((m: any) => ({
-            id: m.id,
-            name: m.name
-        })) || [];
+        const folders = this.getFolderOptions(allEntries);
+        const allMacros = ((game.macros?.contents || []) as any as MacroWithPermission[])
+            .filter(m => m.canExecute)
+            .map(m => ({ id: m.id, name: m.name }))
+            .sort((a, b) => a.name.localeCompare(b.name, 'de'));
 
         const entry = this.entry as VisionEntry;
         if (!entry.fadeInExecute) {
@@ -201,6 +199,30 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
     private getArgsFromField(expanded: any, fieldName: string): { key: string, value: string }[] {
         let args = expanded[fieldName]?.arguments || [];
         return Array.isArray(args) ? args : Object.values(args);
+    }
+
+    private getFolderOptions(entries: any[]): { id: string, name: string }[] {
+        const relevantFolders = entries
+            .filter(e => e.type === "folder")
+            .map(f => ({ id: f.id, name: f.name, parent: f.parentId }));
+        const folderMap = new Map<string, { id: string, name: string, parent: string | null }>(
+            relevantFolders.map(f => [f.id, f])
+        );
+
+        return relevantFolders.map(folder => {
+            const path = [];
+            let current: any = folder;
+
+            while (current) {
+                path.unshift(current.name);
+                current = current.parent ? folderMap.get(current.parent) : null;
+            }
+
+            return {
+                id: folder.id,
+                name: path.join(" / ")
+            };
+        }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
     }
 
     private validate(data: VisionEntry): { valid: boolean; errors: string[] } {

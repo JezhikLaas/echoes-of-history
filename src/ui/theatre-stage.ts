@@ -91,7 +91,7 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     public static startConversation(nscEntries: any[], broadcast: boolean = true) {
-        this.ensemble = nscEntries.slice(0, 4);
+        this.ensemble = nscEntries.slice(0, 10);
         this.activeMimeId = null;
         this.isOpening = true;
 

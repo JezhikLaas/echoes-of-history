@@ -135,3 +135,9 @@ export interface MimeEntry {
 export type SidebarEntry = FolderEntry | VisionEntry | MimeEntry;
 
 export type DataEntry = VisionEntry | MimeEntry;
+
+export interface MacroWithPermission {
+    canExecute: boolean;
+    id: string;
+    name: string;
+}

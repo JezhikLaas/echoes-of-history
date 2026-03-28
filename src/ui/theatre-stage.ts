@@ -32,6 +32,10 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
         return this.ensemble?.length > 0;
     }
 
+    public static get currentMimeId(): string | null {
+        return TheatreStage.activeMimeId;
+    }
+
     public static updateMimeVisibility(mimeId: string, visible: boolean) {
         const mime = this.ensemble.find(m => m.id === mimeId);
         if (mime) {

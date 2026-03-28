@@ -30,6 +30,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
         actions: {
             addImage: ImagesSidebar.#onAddImage,
             showImage: ImagesSidebar.#onShowImage,
+            showMime: ImagesSidebar.#onShowMime,
             deleteEntry: ImagesSidebar.#onDeleteEntry,
             editEntry: ImagesSidebar.#onEditEntry,
             toggleFolder: ImagesSidebar.#onToggleFolder,
@@ -184,6 +185,20 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     static #onShowImage(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
         const id = ImagesSidebar.getIdForEvent(target, ".image-item");
         if (id) this.broadcastShow(id);
+    }
+
+    static #onShowMime(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
+        if (!game.user?.isGM) {
+            return;
+        }
+        writeLog("onShowMime");
+        const mimeId = ImagesSidebar.getIdForEvent(target, ".mime-item");
+        const oldMimeId = TheatreStage.currentMimeId;
+        const instance = (ui as any).theatreStage;
+        if (instance) {
+            writeLog("activating", mimeId);
+            instance.activateMime(mimeId, oldMimeId);
+        }
     }
 
     static async #onDeleteEntry(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {

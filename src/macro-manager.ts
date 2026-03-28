@@ -17,7 +17,8 @@ export class MacroManager {
                 case "reference": {
                     const macro = game.macros?.get(macroEntry.macroId);
                     if (macro) {
-                        await (macro as any).execute(this.createScope(origin, macroEntry.arguments));
+                        const scope = this.createScope(origin, macroEntry.arguments);
+                        await (macro as any).execute(scope);
                     } else {
                         writeWarn(`Macro ${macroEntry.macroId} not found.`);
                     }

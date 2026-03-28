@@ -3,37 +3,32 @@ import { writeWarn, writeError } from "./utils/logging";
 
 export class MacroManager {
     public static async execute(macroEntry: MacroEntry, origin: DataEntry) {
-        switch (macroEntry.type) {
-            case "none":
-                return;
-            case "inline": {
-                const AsyncFunction = Object.getPrototypeOf(async function () {
-                }).constructor;
-                const fn = new AsyncFunction("scope", macroEntry.macroCode);
-                try {
+        try {
+            switch (macroEntry.type) {
+                case "none":
+                    return;
+                case "inline": {
+                    const AsyncFunction = Object.getPrototypeOf(async function () {
+                    }).constructor;
+                    const fn = new AsyncFunction("scope", macroEntry.macroCode);
                     await fn(this.createScope(origin, []));
+                    return;
                 }
-                catch (error) {
-                    writeError("Error executing inline macro:", error)
-                }
-                return;
-            }
-            case "reference": {
-                const macro = game.macros?.get(macroEntry.macroId);
-                if (macro) {
-                    try {
+                case "reference": {
+                    const macro = game.macros?.get(macroEntry.macroId);
+                    if (macro) {
                         await (macro as any).execute(this.createScope(origin, macroEntry.arguments));
+                    } else {
+                        writeWarn(`Macro ${macroEntry.macroId} not found.`);
                     }
-                    catch (error) {
-                        writeError("Error executing referenced macro:", error)
-                    }
-                } else {
-                    writeWarn(`Macro ${macroEntry.macroId} not found.`);
+                    return;
                 }
-                return;
+                default:
+                    macroEntry satisfies never;
             }
-            default:
-                macroEntry satisfies never;
+        }
+        catch (error) {
+            writeError("Error executing inline macro:", error)
         }
     }
 

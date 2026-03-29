@@ -1,9 +1,10 @@
 import { MODULE_ID, SOCKET_NAME } from "./constants";
 import { VisionEntry } from "./settings";
-import {writeLog, writeWarn} from "./utils/logging";
-import {CineasticScenes} from "./api/cineastic-scenes";
-import {SocketDispatcher} from "./socket-dispatcher";
-import {MacroManager} from "./macro-manager";
+import { writeLog, writeWarn } from "./utils/logging";
+import { CineasticScenes } from "./api/cineastic-scenes";
+import { SocketDispatcher } from "./socket-dispatcher";
+import { MacroManager } from "./macro-manager";
+import { sleep } from "./utils";
 
 export class VisionManager {
     public static initialize() {
@@ -48,6 +49,12 @@ export class VisionManager {
         }
 
         if (game.user?.isGM) {
+            if (this.activeId) {
+                const oldEntry = this.getEntryById(this.activeId);
+                await this.hideVision();
+                const wait = oldEntry?.fadeOut || 2000;
+                await sleep(wait);
+            }
             await this.setActiveId(id);
             // We do not want to wait here
             MacroManager.execute(entry.fadeInExecute, entry);

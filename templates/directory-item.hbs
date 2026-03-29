@@ -11,7 +11,13 @@
             <i class="fas fa-user-tie" style="margin-right: 5px; color: #a1c4fd;"></i>
         {{/if}}
 
-        <span class="image-name">{{this.name}}</span>
+        <span class="image-name">
+            {{#if this.shortName}}
+                {{this.shortName}}
+            {{else}}
+                {{this.name}}
+            {{/if}}
+        </span>
     </div>
 
     <div class="controls flexrow">

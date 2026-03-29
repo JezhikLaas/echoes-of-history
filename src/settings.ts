@@ -126,6 +126,7 @@ export interface MimeEntry {
     id: string;
     path: string;
     name: string;
+    shortName: string;
     parentId: string | null;
     visible: boolean;
     onEnterExecute: MacroEntry;

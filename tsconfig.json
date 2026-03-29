@@ -6,9 +6,8 @@
     "moduleResolution": "Bundler",
     "strict": true,
     "skipLibCheck": true,
-
+    "strictFunctionTypes": true,
     "types": ["@league-of-foundry-developers/foundry-vtt-types"],
-
     "rootDir": "src",
     "noEmit": true
   },

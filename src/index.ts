@@ -21,7 +21,7 @@ Hooks.once("init", async () => {
 
     SidebarIntegration.initialize(MODULE_ID, {
         icon: "fa-solid fa-clapperboard",
-        title: "Images to show",
+        title: "Echoes of history",
         appClass: ImagesSidebar,
         gmOnly: true
     });

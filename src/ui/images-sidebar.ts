@@ -1,11 +1,12 @@
 import { MODULE_ID } from "../constants";
 import { writeError, writeLog, writeWarn } from "../utils/logging";
 import { VisionEditDialog } from "./vision-edit";
-import {FolderEntry, MimeEntry, VisionEntry} from "../settings";
+import { DataEntry, FolderEntry, MimeEntry, VisionEntry } from "../settings";
 import { FolderEditDialog } from "./folder-edit";
 import { VisionManager } from "../vision-manager";
 import { TheatreStage } from "./theatre-stage";
 import { warn } from "../utils/notifications";
+import { MimeEdit } from "./mime-edit";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -149,6 +150,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             type: "mime",
             id: uuid,
             name: name,
+            shortName: name,
             path: img,
             visible: true,
             onEnterExecute: { type: "none" },
@@ -268,25 +270,41 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
 
         const settings = game.settings as any;
         const allImages = settings.get(MODULE_ID, "imageList") as any[];
-        const imageData = allImages.find(img => img.id === id);
+        const dataEntry = allImages.find(img => img.id === id) as DataEntry;
 
-        if (!imageData) {
+        if (!dataEntry) {
             writeError("Image entry not found in settings list, exiting");
             return;
         }
 
-        const dialog = new VisionEditDialog(imageData, async (updatedEntry) => {
-            const index = allImages.findIndex(img => img.id === id);
-            if (index > -1) {
-                allImages[index] = updatedEntry;
-                await settings.set(MODULE_ID, "imageList", allImages);
-                await this.render();
-            }
-            else {
-                writeError("Image entry vanished during edit, not updating anything");
-            }
-        });
-        await dialog.render({ force: true });
+        if (dataEntry.type == "vision") {
+            const dialog = new VisionEditDialog(dataEntry, async (updatedEntry) => {
+                const index = allImages.findIndex(img => img.id === id);
+                if (index > -1) {
+                    allImages[index] = updatedEntry;
+                    await settings.set(MODULE_ID, "imageList", allImages);
+                    await this.render();
+                }
+                else {
+                    writeError("Image entry vanished during edit, not updating anything");
+                }
+            });
+            await dialog.render({ force: true });
+        }
+        else if (dataEntry.type == "mime") {
+            const dialog = new MimeEdit(dataEntry, async (updatedEntry) => {
+                const index = allImages.findIndex(img => img.id === id);
+                if (index > -1) {
+                    allImages[index] = updatedEntry;
+                    await settings.set(MODULE_ID, "imageList", allImages);
+                    await this.render();
+                }
+                else {
+                    writeError("Image entry vanished during edit, not updating anything");
+                }
+            });
+            await dialog.render({ force: true });
+        }
     }
 
     static async #onToggleFolder(this: ImagesSidebar, _event: PointerEvent, target: HTMLElement) {
@@ -349,6 +367,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
                     id: foundry.utils.randomID(),
                     path: path,
                     name: filename,
+                    shortName: filename,
                     parentId: null,
                     visible: true,
                     onEnterExecute: { type: "none" }, // Noble "None"-Default

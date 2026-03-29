@@ -1,23 +1,11 @@
-import { MODULE_ID } from "../constants";
+import {MODULE_ID} from "../constants";
 import {MacroWithPermission, VisionEntry} from "../settings";
-import { warn } from "../utils/notifications";
+import {warn} from "../utils/notifications";
+import {EchoesBaseEditSheet} from "./echoes-base-edit-sheet";
 
-interface VisionEditContext {
-    entry: VisionEntry;
-    defaultIn: number;
-    defaultOut: number;
-}
-
-const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
-
-export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<VisionEditContext> {
-    private readonly entry: VisionEntry;
-    private readonly onSaveCallback: (updatedEntry: VisionEntry) => void;
-
+export class VisionEditDialog extends EchoesBaseEditSheet<VisionEntry> {
     constructor(entry: VisionEntry, onSave: (e: VisionEntry) => void) {
-        super();
-        this.entry = { ...entry };
-        this.onSaveCallback = onSave;
+        super(entry, onSave);
     }
 
     static override DEFAULT_OPTIONS = {
@@ -48,45 +36,29 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
             .map(m => ({ id: m.id, name: m.name }))
             .sort((a, b) => a.name.localeCompare(b.name, 'de'));
 
-        const entry = this.entry as VisionEntry;
-        if (!entry.fadeInExecute) {
-            entry.fadeInExecute = { type: "none" };
+        if (!this.entry.fadeInExecute) {
+            this.entry.fadeInExecute = { type: "none" };
         }
-        if (!entry.fadeOutExecute) {
-            entry.fadeOutExecute = { type: "none" };
+        if (!this.entry.fadeOutExecute) {
+            this.entry.fadeOutExecute = { type: "none" };
         }
 
         return {
-            entry: entry,
+            entry: this.entry,
             defaultIn: settings.get(MODULE_ID, "echoFadeIn"),
             defaultOut: settings.get(MODULE_ID, "echoFadeOut"),
             folders: folders,
             allMacros: allMacros,
-            currentParentId: entry.parentId || "",
-            isFadeInNone: entry.fadeInExecute.type === "none",
-            isFadeInInline: entry.fadeInExecute.type === "inline",
-            isFadeInReference: entry.fadeInExecute.type === "reference",
-            fadeInMacroArgs: entry.fadeInExecute.type === "reference" ? entry.fadeInExecute.arguments || [] : [],
-            isFadeOutNone: entry.fadeOutExecute.type === "none",
-            isFadeOutInline: entry.fadeOutExecute.type === "inline",
-            isFadeOutReference: entry.fadeOutExecute.type === "reference",
-            fadeOutMacroArgs: entry.fadeOutExecute.type === "reference" ? entry.fadeOutExecute.arguments || [] : []
+            currentParentId: this.entry.parentId || "",
+            isFadeInNone: this.entry.fadeInExecute.type === "none",
+            isFadeInInline: this.entry.fadeInExecute.type === "inline",
+            isFadeInReference: this.entry.fadeInExecute.type === "reference",
+            fadeInMacroArgs: this.entry.fadeInExecute.type === "reference" ? this.entry.fadeInExecute.arguments || [] : [],
+            isFadeOutNone: this.entry.fadeOutExecute.type === "none",
+            isFadeOutInline: this.entry.fadeOutExecute.type === "inline",
+            isFadeOutReference: this.entry.fadeOutExecute.type === "reference",
+            fadeOutMacroArgs: this.entry.fadeOutExecute.type === "reference" ? this.entry.fadeOutExecute.arguments || [] : []
         };
-    }
-
-    protected override async _onRender(context: any, options: any): Promise<void> {
-        await super._onRender(context, options);
-        const html = this.element;
-
-        html.querySelectorAll('select[data-action="changeMacroType"]').forEach(select => {
-            select.addEventListener("change", () => {
-                const formData = new FormData(this.element as HTMLFormElement);
-                const expanded = foundry.utils.expandObject(Object.fromEntries(formData.entries())) as any;
-
-                Object.assign(this.entry, expanded);
-                this.render();
-            });
-        });
     }
 
     static async #onSave(this: VisionEditDialog, _event: Event, _target: HTMLElement) {
@@ -101,7 +73,6 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
             fadeIn: Number(data.fadeIn),
             fadeOut: Number(data.fadeOut),
             parentId: data.parentId || null,
-            visible: formData.has("visible"),
             fadeInExecute: data.fadeInExecute,
             fadeOutExecute: data.fadeOutExecute
         };
@@ -132,13 +103,12 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
 
     static async #onAddInArg(this: VisionEditDialog, _event: Event, _target: HTMLElement) {
         const [expanded, args] = this.getParametersFromForm("fadeInExecute");
-        const entry = this.entry as any;
+        this.entry.fadeInExecute = expanded.fadeInExecute || { type: "none" };
 
-        entry.fadeInExecute = expanded.fadeInExecute || { type: "none" };
-
-        entry.fadeInExecute.arguments = args;
-        entry.fadeInExecute.arguments.push({ key: "", value: "" });
-
+        if (this.entry.fadeInExecute.type == "reference") {
+            this.entry.fadeInExecute.arguments = args;
+            this.entry.fadeInExecute.arguments.push({key: "", value: ""});
+        }
         this.render();
     }
 
@@ -147,25 +117,23 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
         if (isNaN(index)) return;
 
         let [expanded, args] = this.getParametersFromForm("fadeInExecute");
+        this.entry.fadeInExecute = expanded.fadeInExecute;
 
-        const entry = this.entry as any;
-        entry.fadeInExecute = expanded.fadeInExecute;
-        entry.fadeInExecute.arguments = args;
-
-        entry.fadeInExecute.arguments.splice(index, 1);
-
+        if (this.entry.fadeInExecute.type == "reference") {
+            this.entry.fadeInExecute.arguments = args;
+            this.entry.fadeInExecute.arguments.splice(index, 1);
+        }
         this.render();
     }
 
     static async #onAddOutArg(this: VisionEditDialog, _event: Event, _target: HTMLElement) {
         const [expanded, args] = this.getParametersFromForm("fadeOutExecute");
-        const entry = this.entry as any;
+        this.entry.fadeOutExecute = expanded.fadeOutExecute || { type: "none" };
 
-        entry.fadeOutExecute = expanded.fadeOutExecute || { type: "none" };
-
-        entry.fadeOutExecute.arguments = args;
-        entry.fadeOutExecute.arguments.push({ key: "", value: "" });
-
+        if (this.entry.fadeOutExecute.type == "reference") {
+            this.entry.fadeOutExecute.arguments = args;
+            this.entry.fadeOutExecute.arguments.push({key: "", value: ""});
+        }
         this.render();
     }
 
@@ -174,55 +142,14 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
         if (isNaN(index)) return;
 
         let [expanded, args] = this.getParametersFromForm("fadeOutExecute");
+        this.entry.fadeOutExecute = expanded.fadeOutExecute;
 
-        const entry = this.entry as any;
-        entry.fadeOutExecute = expanded.fadeOutExecute;
-        entry.fadeOutExecute.arguments = args;
-
-        entry.fadeOutExecute.arguments.splice(index, 1);
+        if (this.entry.fadeOutExecute.type == "reference") {
+            this.entry.fadeOutExecute.arguments = args;
+            this.entry.fadeOutExecute.arguments.splice(index, 1);
+        }
 
         this.render();
-    }
-
-    private getParametersFromForm(name: string): [any, { key: string, value: string }[]] {
-        const form = this.element as HTMLFormElement;
-
-        const formData = new FormData(form);
-        const flatData = Object.fromEntries(formData.entries());
-        const expanded = foundry.utils.expandObject(flatData) as any;
-
-        let parameters = this.getArgsFromField(expanded, name);
-
-        return [expanded, parameters];
-    }
-
-    private getArgsFromField(expanded: any, fieldName: string): { key: string, value: string }[] {
-        let args = expanded[fieldName]?.arguments || [];
-        return Array.isArray(args) ? args : Object.values(args);
-    }
-
-    private getFolderOptions(entries: any[]): { id: string, name: string }[] {
-        const relevantFolders = entries
-            .filter(e => e.type === "folder")
-            .map(f => ({ id: f.id, name: f.name, parent: f.parentId }));
-        const folderMap = new Map<string, { id: string, name: string, parent: string | null }>(
-            relevantFolders.map(f => [f.id, f])
-        );
-
-        return relevantFolders.map(folder => {
-            const path = [];
-            let current: any = folder;
-
-            while (current) {
-                path.unshift(current.name);
-                current = current.parent ? folderMap.get(current.parent) : null;
-            }
-
-            return {
-                id: folder.id,
-                name: path.join(" / ")
-            };
-        }).sort((a, b) => a.name.localeCompare(b.name, 'de'));
     }
 
     private validate(data: VisionEntry): { valid: boolean; errors: string[] } {
@@ -276,3 +203,4 @@ export class VisionEditDialog extends HandlebarsApplicationMixin(ApplicationV2)<
         };
     }
 }
+

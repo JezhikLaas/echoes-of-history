@@ -159,6 +159,8 @@ export class Recap {
     }
 
     private static closeOverlay(): void {
+        if (this.waitToStart) return;
+
         const el = document.getElementById(this.OVERLAY_ID);
         if (!el) return;
 

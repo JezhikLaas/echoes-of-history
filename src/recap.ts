@@ -66,9 +66,7 @@ export class Recap {
             });
 
             if (this.waitToStart) {
-                writeLog("Waiting for first user gesture, running state is ", this.isRunning);
                 await game.audio?.awaitFirstGesture();
-                writeLog("User gesture received, running state is ", this.isRunning);
             }
 
             this.localIndex += 1;
@@ -76,6 +74,10 @@ export class Recap {
                 isFollowUp = true;
                 this.localIndex = 0;
                 waitTime = pauseMs;
+            }
+
+            if (this.waitToStart) {
+                waitTime = 0;
             }
 
             this.slideTimer = window.setTimeout(() => {

@@ -108,25 +108,6 @@ export class Recap {
         this.openOverlay();
     }
 
-    private static async waitForUserInteraction(): Promise<void> {
-        return new Promise((resolve) => {
-            const overlay = document.getElementById("eoh-recap-overlay"); // Oder dein spezifischer ID-Selektor
-            if (!overlay) return resolve();
-
-            const listener = () => {
-                overlay.removeEventListener("click", listener);
-                // DER ENTSCHEIDENDE MOMENT: Audio für den Browser freischalten
-                if (game.audio) {
-                    game.audio.awaitFirstGesture()
-                    console.log("Echoes of History | AudioContext unlocked via Recap.");
-                }
-                resolve();
-            };
-
-            overlay.addEventListener("click", listener);
-        });
-    }
-
     private static isOverlayOpen(): boolean {
         const el = document.getElementById(this.OVERLAY_ID);
         return el?.classList.contains("is-open") ?? false;

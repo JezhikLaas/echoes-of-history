@@ -93,8 +93,8 @@
                 <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
                     {{#each fadeInMacroArgs}}
                         <div class="flexrow" style="gap: 5px;">
-                            <input type="text" name="fadeInExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key (z.B. vol)" style="flex: 1;">
-                            <input type="text" name="fadeInExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value (z.B. 0.5)" style="flex: 1;">
+                            <input type="text" name="fadeInExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key" style="flex: 1;">
+                            <input type="text" name="fadeInExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value" style="flex: 1;">
                             <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeInArg" data-index="{{@index}}">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -152,8 +152,8 @@
                 <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
                     {{#each fadeOutMacroArgs}}
                         <div class="flexrow" style="gap: 5px;">
-                            <input type="text" name="fadeOutExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key (z.B. vol)" style="flex: 1;">
-                            <input type="text" name="fadeOutExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value (z.B. 0.5)" style="flex: 1;">
+                            <input type="text" name="fadeOutExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key" style="flex: 1;">
+                            <input type="text" name="fadeOutExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value" style="flex: 1;">
                             <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeOutArg" data-index="{{@index}}">
                                 <i class="fas fa-trash"></i>
                             </button>

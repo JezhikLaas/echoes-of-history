@@ -21,7 +21,7 @@
     <div class="form-group" style="margin-bottom: 15px;">
         <div class="form-fields">
             <label>{{localize "echoes-of-history.settings.short-name-label"}}
-                <input type="text" name="shortName" value="{{entry.shortName}}"">
+                <input type="text" name="shortName" value="{{entry.shortName}}">
             </label>
         </div>
     </div>
@@ -93,8 +93,8 @@
                 <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
                     {{#each onEnterMacroArgs}}
                         <div class="flexrow" style="gap: 5px;">
-                            <input type="text" name="onEnterExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key (z.B. vol)" style="flex: 1;">
-                            <input type="text" name="onEnterExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value (z.B. 0.5)" style="flex: 1;">
+                            <input type="text" name="onEnterExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key" style="flex: 1;">
+                            <input type="text" name="onEnterExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value" style="flex: 1;">
                             <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeInArg" data-index="{{@index}}">
                                 <i class="fas fa-trash"></i>
                             </button>
@@ -152,8 +152,8 @@
                 <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
                     {{#each onExitMacroArgs}}
                         <div class="flexrow" style="gap: 5px;">
-                            <input type="text" name="onExitExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key (z.B. vol)" style="flex: 1;">
-                            <input type="text" name="onExitExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value (z.B. 0.5)" style="flex: 1;">
+                            <input type="text" name="onExitExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key" style="flex: 1;">
+                            <input type="text" name="onExitExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value" style="flex: 1;">
                             <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeOutArg" data-index="{{@index}}">
                                 <i class="fas fa-trash"></i>
                             </button>

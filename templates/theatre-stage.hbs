@@ -8,15 +8,6 @@
                  data-mime-id="{{mime.id}}"
                  style="{{#unless mime.visible}}display: none;{{/unless}}">
 
-                {{#if ../isGM}}
-                    <button class="remove-mime-btn"
-                            data-action="removeMime"
-                            data-mime-id="{{mime.id}}"
-                            title="Diesen Mimen von der Bühne schicken">
-                        <i class="fas fa-times"></i>
-                    </button>
-                {{/if}}
-
                 <div class="mime-portrait-frame">
                     <img src="{{mime.path}}" alt="{{mime.name}}" class="mime-img" />
                     <div class="mime-spotlight-glow"></div>

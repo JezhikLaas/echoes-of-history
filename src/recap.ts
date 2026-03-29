@@ -1,5 +1,6 @@
 import { MODULE_ID } from "./constants";
 import { warn } from "./utils/notifications";
+import {writeLog} from "./utils/logging";
 
 export type RecapOptions = {
     title?: string;
@@ -33,6 +34,7 @@ export class Recap {
         this.isRunning = true;
         this.localIndex = 0;
         this.waitToStart = options?.waitToStart != undefined ? options?.waitToStart : true;
+        writeLog("Wait to start is ", this.waitToStart);
         let isFollowUp = false;
 
         this.setOverlayContent({ bodyHtml: "", hint: "" });
@@ -64,8 +66,9 @@ export class Recap {
             });
 
             if (this.waitToStart) {
+                writeLog("Waiting for first user gesture, running state is ", this.isRunning);
                 await game.audio?.awaitFirstGesture();
-                this.waitToStart = false;
+                writeLog("User gesture received, running state is ", this.isRunning);
             }
 
             this.localIndex += 1;
@@ -75,7 +78,10 @@ export class Recap {
                 waitTime = pauseMs;
             }
 
-            this.slideTimer = window.setTimeout(tick, Math.max(250, waitTime));
+            this.slideTimer = window.setTimeout(() => {
+                this.waitToStart = false;
+                tick()
+            }, Math.max(250, waitTime));
         };
 
         tick();
@@ -159,6 +165,7 @@ export class Recap {
     }
 
     private static closeOverlay(): void {
+        writeLog("Got close command, waitToStart is ", this.waitToStart);
         if (this.waitToStart) return;
 
         const el = document.getElementById(this.OVERLAY_ID);

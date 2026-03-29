@@ -4,17 +4,19 @@ import { warn } from "./utils/notifications";
 export type RecapOptions = {
     title?: string;
     durationMs?: number;
+    waitToStart?: boolean;
 };
 
 export class Recap {
     private static isRunning: boolean = false;
+    private static waitToStart: boolean = true;
     private static localIndex: number = 0;
     private static slideTimer: number | null = null;
     private static readonly OVERLAY_ID = `${MODULE_ID}-recap-overlay`;
     private static readonly FADE_MS = 600;
     private static readonly OVERLAY_FADE_MS = 800;
 
-    public static async start(_options?: RecapOptions): Promise<void>  {
+    public static async start(options?: RecapOptions): Promise<void>  {
         const settings = game.settings as any;
         if (!settings) return;
         if (this.isRunning || this.isOverlayOpen()) return;
@@ -30,6 +32,7 @@ export class Recap {
 
         this.isRunning = true;
         this.localIndex = 0;
+        this.waitToStart = options?.waitToStart != undefined ? options?.waitToStart : true;
         let isFollowUp = false;
 
         this.setOverlayContent({ bodyHtml: "", hint: "" });
@@ -47,7 +50,9 @@ export class Recap {
                 if (!this.isRunning) return;
             }
 
-            const text = game.i18n?.format("echoes-of-history.recap.hint_close") ?? "Click to close";
+            const text = !isFollowUp && this.waitToStart
+                ? game.i18n?.format("echoes-of-history.recap.hint-start") ?? "Click to start"
+                : game.i18n?.format("echoes-of-history.recap.hint-close") ?? "Click to close"
 
             this.setOverlayContent({
                 bodyHtml: this.formatSlideAsHtml(list, this.localIndex),
@@ -57,6 +62,11 @@ export class Recap {
             requestAnimationFrame(() => {
                 this.fadeInBody();
             });
+
+            if (this.waitToStart) {
+                await game.audio?.awaitFirstGesture();
+                this.waitToStart = false;
+            }
 
             this.localIndex += 1;
             if (this.localIndex >= list.length) {
@@ -88,7 +98,7 @@ export class Recap {
 
         if (this.localIndex < 0 || this.localIndex >= list.length) this.localIndex = 0;
 
-        const text = game.i18n?.format("echoes-of-history.recap.hint_close") ?? "Click to close";
+        const text = game.i18n?.format("echoes-of-history.recap.hint-close") ?? "Click to close";
 
         this.setOverlayContent({
             bodyHtml: this.formatSlideAsHtml(list, this.localIndex),
@@ -96,6 +106,25 @@ export class Recap {
         });
 
         this.openOverlay();
+    }
+
+    private static async waitForUserInteraction(): Promise<void> {
+        return new Promise((resolve) => {
+            const overlay = document.getElementById("eoh-recap-overlay"); // Oder dein spezifischer ID-Selektor
+            if (!overlay) return resolve();
+
+            const listener = () => {
+                overlay.removeEventListener("click", listener);
+                // DER ENTSCHEIDENDE MOMENT: Audio für den Browser freischalten
+                if (game.audio) {
+                    game.audio.awaitFirstGesture()
+                    console.log("Echoes of History | AudioContext unlocked via Recap.");
+                }
+                resolve();
+            };
+
+            overlay.addEventListener("click", listener);
+        });
     }
 
     private static isOverlayOpen(): boolean {

@@ -49,6 +49,7 @@ Bring your NPCs and heroes to the spotlight with a dedicated ensemble overlay.
 The heart of the system is the **Automation Hook**. Every Vision and Mime can trigger actions at specific points: **On Enter** and **On Exit**.
 
 ### The "Scope" Variable
+(*Note:* Under construction for mimes!)
 
 When a macro is triggered, it receives a `scope` object containing context-aware data:
 

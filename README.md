@@ -91,6 +91,20 @@ Click the **Theatre Icon** in the sidebar.
 You can run a performance on top of a vision - show your players the taverne they enter before they start a conversation with some locals over a few ales.
 
 ------
+## ⚓️ Installation
+Since Echoes of History is not listed on the official Foundry VTT web directory, you can install it manually using the Manifest URL. This ensures you always get the authentic, unfiltered version directly from the source.
+
+Open the Foundry VTT Setup screen.
+
+Navigate to the Add-on Modules tab.
+
+Click the Install Module button at the bottom.
+
+Paste the following URL into the Manifest URL field:
+https://github.com/JezhikLaas/echoes-of-history/releases/latest/download/module.json
+
+Click Install.
+------
 *Remember!*
 
 **Noble be man, helpful and good.**

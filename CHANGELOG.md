@@ -3,7 +3,7 @@
 ### New
 - Introduced a sidebar tab for managing prepared images with synchronized fade-in/out effects.
 
-## [0.4.0] - 2026-03-xx (unreleased)
+## [0.4.1] - 2026-03-31
 ### New
 - Theatre stage: show your players who is talking to them
 ### Fixes

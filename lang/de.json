@@ -48,6 +48,9 @@
       "hint_close": "Klick zum Schließen",
       "hint-start": "Klick zum Start"
     },
+    "hud": {
+      "add-to-mime": "Theaterbühne öffnen"
+    },
     "recap-editor": {
       "sections_saved": "[{name}] {length} Abschnitt(e) gespeichert."
     },
@@ -65,7 +68,8 @@
       "switch-visible": "Sichtbarkeit umschalten",
       "edit": "Bearbeiten",
       "invalid_type": "Der Eintrag \"{name}\" kann nicht für eine Unterhaltung verwendet werden.",
-      "already-added": "Der Eintrag \"{name}\" ist bereits Teil der Liste."
+      "already-added": "Der Eintrag \"{name}\" ist bereits Teil der Liste.",
+      "quick-show": "Hierherziehen für Sofort-show"
     },
     "folders": {
       "new-folder": "Neuer Ordner",

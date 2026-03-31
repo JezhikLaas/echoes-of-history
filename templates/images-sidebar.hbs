@@ -1,4 +1,18 @@
 <div class="echoes-of-history-sidebar">
+    <div class="eoh-open-stage" data-action="open-stage">
+        <div class="eoh-open-stage-label">
+            <i class="fas fa-theater-masks"></i>
+            <span>Open Stage</span>
+        </div>
+        <div class="eoh-open-stage-hint">{{localize "echoes-of-history.sidebar.quick-show"}}</div>
+    </div>
+
+    <hr>
+    <div class="eoh-mime-list">
+        {{#each images}}
+        {{/each}}
+    </div>
+
     <header class="sidebar-header flexrow">
         <button data-action="addImage"><i class="fas fa-image"></i> {{localize "echoes-of-history.sidebar.add-image"}}</button>
         <button data-action="addFolder"><i class="fas fa-folder-plus"></i></button>
@@ -6,7 +20,6 @@
             <i class="fas fa-user-plus"></i>
         </button>
     </header>
-
     <ul class="image-list directory-list">
         {{#each tree}}
             {{> directoryItem this}}

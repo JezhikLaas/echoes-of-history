@@ -7,15 +7,26 @@ import { VisionManager } from "../vision-manager";
 import { TheatreStage } from "./theatre-stage";
 import { warn } from "../utils/notifications";
 import { MimeEdit } from "./mime-edit";
+import { MimeManager } from "../mime-manager";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     private readonly dragDrop: DragDrop[];
+    private readonly mimeManager: MimeManager;
+    static #instance: ImagesSidebar | null = null;
 
     constructor(options = { }) {
         super(options);
         this.dragDrop = this.createDragDropHandlers();
+        this.mimeManager = new MimeManager(this);
+    }
+
+    public static get instance() {
+        if (!this.#instance) {
+            this.#instance = new ImagesSidebar();
+        }
+        return this.#instance;
     }
 
     static override DEFAULT_OPTIONS = {
@@ -26,7 +37,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             frame: false
         },
         dragDrop: [{
-            dropSelector: ".echoes-of-history-sidebar, .folder-item"
+            dropSelector: ".echoes-of-history-sidebar, .folder-item .eoh-open-stage"
         }],
         actions: {
             addImage: ImagesSidebar.#onAddImage,
@@ -79,20 +90,11 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     private async onDrop(event: DragEvent): Promise<void> {
         const target = event.target as HTMLElement;
 
-        const folderItem = target.closest(".folder-item") as HTMLElement | null;
-        let folderId: string | null = null;
-        if (folderItem) {
-            folderId = folderItem.dataset.id || null;
-        }
-
-        const sidebar = target.closest(".echoes-of-history-sidebar");
-        if (!sidebar) {
-            writeWarn("Unable to determine target");
-            return;
-        }
-
         event.preventDefault();
         event.stopPropagation();
+
+        const openStage = target.closest(".eoh-open-stage") as HTMLElement | null;
+        const folderItem = target.closest(".folder-item") as HTMLElement | null;
 
         const raw = event.dataTransfer?.getData("text/plain");
         if (!raw) return;
@@ -105,58 +107,50 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             return;
         }
 
-        if (data.type !== "JournalEntry" || !data.fcbData) return;
+        if (openStage) {
+            await this.mimeManager.addFromDropDataToOpenStage(data);
+        }
+        else if (folderItem) {
+            await this.mimeManager.addMimeFromDropData(data, folderItem?.id);
+        }
 
-        if (data.fcbData.topic !== 1 && data.fcbData.topic !== 4) {
-            warn("echoes-of-history.sidebar.invalid_type", {
-                name: data.fcbData.name
-            });
+        writeWarn("Drop target not found");
+    }
 
+    public async handleActor(data: any, folderId: string | null): Promise<void> {
+        const entry = await this.createActorFromDrop(data, folderId);
+        if (!entry) {
+            writeWarn("Unable to create mime from drop");
             return;
         }
+        await this.addMimeEntry(entry);
+    }
 
-        const uuid = data.uuid ?? data.fcbData?.childId;
-        if (!uuid) {
-            writeWarn("Unable to extract uuid", data);
-            return;
-        }
+    private async createActorFromDrop(data: any, folderId: string | null): Promise<MimeEntry | null> {
+        const mime = await fromUuid(data.uuid) as any;
+        if (!mime) return null;
 
-        let img = "icons/svg/mystery-man.svg";
-        try {
-            const doc = await (fromUuid as any)(uuid);
-            const page = doc?.pages?.contents?.[0];
-            if (page?.system?.img) {
-                img = page.system.img;
-            }
-        } catch {
-            writeWarn("Failed to fetch image for participant", uuid);
-        }
-
-        const name = data.fcbData.name
-            ? data.fcbData.typeName
-                ? data.fcbData.name + " (" + data.fcbData.typeName + ")"
-                : data.fcbData.name
-            : "Unknown";
-
-        const settings = game.settings as any;
-        const allEntries = settings.get(MODULE_ID, "imageList") as any[] || [];
-
-        if (allEntries.find(m => m.id == uuid)) {
-            warn("echoes-of-history.sidebar.already-added", { name: name });
-            return;
-        }
-
-        const entry: MimeEntry = {
+        return {
             type: "mime",
-            id: uuid,
-            name: name,
-            shortName: name,
-            path: img,
+            id: data.uuid,
+            name: mime.name,
+            shortName: mime.name,
+            path: mime.img,
             visible: true,
             onEnterExecute: { type: "none" },
             onExitExecute: { type: "none" },
             parentId: folderId
         };
+    }
+
+    private async addMimeEntry(entry: MimeEntry): Promise<void> {
+        const settings = game.settings as any;
+        const allEntries = settings.get(MODULE_ID, "imageList") as any[] || [];
+
+        if (allEntries.find(m => m.id == entry.id)) {
+            warn("echoes-of-history.sidebar.already-added", { name: entry.name });
+            return;
+        }
 
         allEntries.push(entry);
         await settings.set(MODULE_ID, "imageList", allEntries);

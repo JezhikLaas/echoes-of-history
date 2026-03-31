@@ -48,6 +48,9 @@
       "hint-close": "Click to close",
       "hint-start": "Click to start"
     },
+    "hud": {
+      "add-to-mime": "Open theatre stage"
+    },
     "recap-editor": {
       "sections_saved": "[{name}] {length} sections(s) saved."
     },
@@ -64,7 +67,8 @@
       "switch-visible": "Toggle visibility",
       "edit": "Edit",
       "invalid_type": "The entry \"{name}\" cannot be added to a conversation.",
-      "already-added": "The entry \"{name}\" is already part of the list."
+      "already-added": "The entry \"{name}\" is already part of the list.",
+      "quick-show": "Drop here for quick show"
     },
     "folders": {
       "new-folder": "New Folder",

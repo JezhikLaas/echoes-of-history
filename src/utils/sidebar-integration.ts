@@ -3,10 +3,17 @@ interface SidebarInstanceEntry {
     instance: any;
 }
 
+export interface ISidebarApp {
+    render(options?: { force?: boolean }): Promise<any>;
+}
+export interface ISidebarClass {
+    instance: ISidebarApp;
+}
+
 export class SidebarIntegration {
     private static instances: SidebarInstanceEntry[] = [];
 
-    public static initialize(tabId: string, options: { icon: string, title: string, appClass: any, gmOnly: boolean }) {
+    public static initialize(tabId: string, options: { icon: string, title: string, appClass: ISidebarClass, gmOnly: boolean }) {
         Hooks.on("renderSidebar", (_app: any, html: HTMLElement) => {
             if (options.gmOnly) {
                 if (!game.user?.isGM) {
@@ -56,7 +63,7 @@ export class SidebarIntegration {
         }
     }
 
-    private static injectTabSection(html: HTMLElement, id: string, appClass: any) {
+    private static injectTabSection(html: HTMLElement, id: string, appClass: ISidebarClass) {
         const $html = $(html);
         const $content = $html.find("#sidebar-content");
         if ($content.find(`[data-tab="${id}"]`).length === 0) {
@@ -66,7 +73,7 @@ export class SidebarIntegration {
         const container = html.querySelector(`#${id}-sidebar`);
         const entry = this.instances.find(x => x.id == id)
         if (container && !entry?.instance) {
-            const sidebar = new appClass();
+            const sidebar = appClass.instance;
             this.instances.push({ id: id, instance: sidebar });
             (ui as any)[id] = sidebar;
         }

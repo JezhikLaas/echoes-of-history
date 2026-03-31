@@ -393,3 +393,35 @@
     border-color: #c0392b;
     color: #fff;
 }
+
+.echoes-hud-btn {
+    border: 1px solid var(--color-border-highlight);
+    border-radius: 5px;
+    transition: all 0.2s ease-in-out;
+}
+
+.echoes-hud-btn:hover {
+    box-shadow: 0 0 10px var(--color-shadow-highlight);
+    color: #f0ad4e;
+    transform: scale(1.1);
+}
+
+.echoes-hud-btn i {
+    font-size: 1.2rem;
+}
+
+.eoh-open-stage {
+    border: 2px dashed var(--color-border-dark);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.eoh-open-stage.drag-hover {
+    border-color: #f0ad4e;
+    box-shadow: 0 0 15px rgba(240, 173, 78, 0.5);
+    background: rgba(240, 173, 78, 0.1);
+    transform: scale(1.02);
+}

@@ -1,10 +1,11 @@
-import {MacroManager} from "../macro-manager";
-import {MODULE_ID} from "../constants";
+import { MacroManager } from "../macro-manager";
+import { MODULE_ID } from "../constants";
+import { MimeEntry } from "../settings";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
-    private static ensemble: any[] = [];
+    private static ensemble: MimeEntry[] = [];
     private static activeMimeId: string | null = null;
     private static isOpening: boolean = false;
 
@@ -94,11 +95,24 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
         await TheatreStage.closeConversation(this);
     }
 
-    public static startConversation(nscEntries: any[], broadcast: boolean = true) {
+    public static startConversation(nscEntries: MimeEntry[], broadcast: boolean = true) {
         this.ensemble = nscEntries.slice(0, 10);
         this.activeMimeId = null;
         this.isOpening = true;
+        this.openCurtain(broadcast);
+    }
 
+    public static addToConversation(nscEntries: MimeEntry[], broadcast: boolean = true) {
+        // Should be okay, we do not have that much mimes.
+        if (nscEntries.find(n => this.ensemble.find(e => e.id == n.id))) {
+            return;
+        }
+
+        this.ensemble = [...this.ensemble, ...nscEntries];
+        this.openCurtain(broadcast);
+    }
+
+    private static openCurtain(broadcast: boolean) {
         const hud = (ui as any).theatreStage || new TheatreStage();
         (ui as any).theatreStage = hud;
         hud.render({ force: true }).then(() => {

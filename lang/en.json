@@ -68,7 +68,8 @@
       "edit": "Edit",
       "invalid_type": "The entry \"{name}\" cannot be added to a conversation.",
       "already-added": "The entry \"{name}\" is already part of the list.",
-      "quick-show": "Drop here for quick show"
+      "quick-show": "Drop here for quick show",
+      "only-open-stage": "Only open stage is allowed during a performance"
     },
     "folders": {
       "new-folder": "New Folder",

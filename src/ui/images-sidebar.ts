@@ -80,7 +80,7 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
     }
 
     private canDragDrop(_info: string): boolean {
-        return !TheatreStage.isActive;
+        return true;
     }
 
     private onDragOver(event: DragEvent): void {
@@ -111,6 +111,10 @@ export class ImagesSidebar extends HandlebarsApplicationMixin(ApplicationV2) {
             await this.mimeManager.addFromDropDataToOpenStage(data);
         }
         else if (folderItem) {
+            if (TheatreStage.isActive) {
+                warn("echoes-of-history.sidebar.only-open-stage")
+                return;
+            }
             await this.mimeManager.addMimeFromDropData(data, folderItem?.id);
         }
 

@@ -1,6 +1,7 @@
 import { MacroManager } from "../macro-manager";
 import { MODULE_ID } from "../constants";
 import { MimeEntry } from "../settings";
+import {writeWarn} from "../utils/logging";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -104,7 +105,8 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
 
     public static addToConversation(nscEntries: MimeEntry[], broadcast: boolean = true) {
         // Should be okay, we do not have that much mimes.
-        if (nscEntries.find(n => this.ensemble.find(e => e.id == n.id))) {
+        if (nscEntries.some(n => this.ensemble.some(e => e.id === n.id))) {
+            writeWarn("Ensemble already contains at least one of the new mimes");
             return;
         }
 

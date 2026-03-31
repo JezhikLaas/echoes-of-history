@@ -69,7 +69,8 @@
       "edit": "Bearbeiten",
       "invalid_type": "Der Eintrag \"{name}\" kann nicht für eine Unterhaltung verwendet werden.",
       "already-added": "Der Eintrag \"{name}\" ist bereits Teil der Liste.",
-      "quick-show": "Hierherziehen für Sofort-show"
+      "quick-show": "Hierherziehen für Sofort-show",
+      "only-open-stage": "Bei aktiver Bühne ist nur Open Stage möglich"
     },
     "folders": {
       "new-folder": "Neuer Ordner",

@@ -8,8 +8,7 @@ export class MacroManager {
                 case "none":
                     return;
                 case "inline": {
-                    const AsyncFunction = Object.getPrototypeOf(async function () {
-                    }).constructor;
+                    const AsyncFunction = Object.getPrototypeOf(async function () { }).constructor;
                     const fn = new AsyncFunction("scope", macroEntry.macroCode);
                     await fn(this.createScope(origin, []));
                     return;

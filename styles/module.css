@@ -9,32 +9,6 @@
     }
 }
 
-.vision-edit-container .section-divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: 20px 0 10px 0;
-    font-weight: bold;
-    font-variant: small-caps;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.vision-edit-container .section-divider::before,
-.vision-edit-container .section-divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid #7774; /* Dezente Foundry-Linie */
-}
-
-.vision-edit-container .section-divider:not(:empty)::before {
-    margin-right: .5em;
-}
-
-.vision-edit-container .section-divider:not(:empty)::after {
-    margin-left: .5em;
-}
-
 .echoes-of-history-app-shell .directory-item {
     display: flex;
     align-items: center;
@@ -92,8 +66,6 @@
     inset: 0;
     place-items: center;
     z-index: 100000;
-
-    /* Immer im DOM, aber unsichtbar */
     display: grid;
     opacity: 0;
     pointer-events: none;
@@ -259,155 +231,167 @@
     padding-bottom: 5vh;
 }
 
-.mimes-ensemble {
-    display: flex;
-    gap: 1.5vw;
-    align-items: flex-end;
-    justify-content: center;
-    pointer-events: auto;
-    max-width: 95vw
+@scope (.echoes-of-history-sidebar) {
+    .theatre-btn i {
+        color: #f1c40f;
+        text-shadow: 0 0 5px rgba(241, 196, 15, 0.5);
+    }
+
+    .theatre-btn:hover i {
+        color: #fff;
+        filter: drop-shadow(0 0 8px #f1c40f);
+    }
+
+    .theatre-control-panel {
+        margin-top: auto;
+        padding: 8px;
+        border-top: 1px solid #444;
+        background: #111;
+    }
+
+    .theatre-control-panel .stop-theatre-btn {
+        width: 100%;
+        background: #5a1a1a;
+        color: #f0c0c0;
+        border: 1px solid #7f0d0d;
+        padding: 8px;
+        cursor: pointer;
+        font-family: inherit;
+        transition: all 0.2s;
+    }
+
+    .theatre-control-panel .stop-theatre-btn:hover {
+        background: #7f2020;
+        border-color: #c0392b;
+        color: #fff;
+    }
 }
 
-.mime-actor {
-    position: relative;
-    transition: opacity 0.5s ease;
-    z-index: 1;
-}
+@scope (.echoes-of-history) {
+    .vision-edit-container .section-divider {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        margin: 20px 0 10px 0;
+        font-weight: bold;
+        font-variant: small-caps;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-.mime-portrait-frame {
-    transform: scale(0.9) translateY(0);
-    filter: grayscale(0.5) brightness(0.6) blur(2px);
-    transition:
-            transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-            filter 0.5s ease;
-}
+    .vision-edit-container .section-divider::before,
+    .vision-edit-container .section-divider::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #7774;
+    }
 
-.is-opening .mime-actor {
-    opacity: 0;
-    animation: mime-materialize 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
+    .vision-edit-container .section-divider:not(:empty)::before {
+        margin-right: .5em;
+    }
 
-.mime-actor:nth-child(1) { animation-delay: 0.2s; }
-.mime-actor:nth-child(2) { animation-delay: 0.4s; }
-.mime-actor:nth-child(3) { animation-delay: 0.6s; }
-.mime-actor:nth-child(4) { animation-delay: 0.8s; }
-.mime-actor:nth-child(5) { animation-delay: 1.0s; }
-.mime-actor:nth-child(6) { animation-delay: 1.2s; }
-.mime-actor:nth-child(7) { animation-delay: 1.4s; }
-.mime-actor:nth-child(8) { animation-delay: 1.6s; }
+    .vision-edit-container .section-divider:not(:empty)::after {
+        margin-left: .5em;
+    }
 
-.mime-img {
-    max-height: 45vh;
-    width: auto;
-    display: block;
-    mask-image: linear-gradient(to top, transparent 0%, black 15%);
-    transition: max-height 0.4s ease;
-}
+    .mimes-ensemble {
+        display: flex;
+        gap: 1.5vw;
+        align-items: flex-end;
+        justify-content: center;
+        pointer-events: auto;
+        max-width: 95vw
+    }
 
-.mime-actor.is-active .mime-portrait-frame {
-    transform: scale(1.3) translateY(-40px);
-    filter: grayscale(0) brightness(1.2) contrast(1.1) blur(0);
-    z-index: 100;
-}
-.mime-actor.is-active {
-    opacity: 1;
-    z-index: 100;
-}
+    .mime-actor {
+        position: relative;
+        transition: opacity 0.5s ease;
+        z-index: 1;
+    }
 
-.mime-name {
-    font-family: "Signika", sans-serif;
-    color: white;
-    text-shadow: 0 0 8px black;
-    font-size: 1.2rem;
-    display: block;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    margin-top: 10px;
-}
+    .mime-portrait-frame {
+        transform: scale(0.9) translateY(0);
+        filter: grayscale(0.5) brightness(0.6) blur(2px);
+        transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+        filter 0.5s ease;
+    }
 
-.mime-actor.is-active .mime-name {
-    opacity: 1;
-}
+    .is-opening .mime-actor {
+        opacity: 0;
+        animation: mime-materialize 1.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
 
-.mime-actor:hover .remove-mime-btn {
-    opacity: 1;
-}
+    .mime-actor:nth-child(1) {
+        animation-delay: 0.2s;
+    }
+    .mime-actor:nth-child(2) {
+        animation-delay: 0.4s;
+    }
+    .mime-actor:nth-child(3) {
+        animation-delay: 0.6s;
+    }
+    .mime-actor:nth-child(4) {
+        animation-delay: 0.8s;
+    }
+    .mime-actor:nth-child(5) {
+        animation-delay: 1.0s;
+    }
+    .mime-actor:nth-child(6) {
+        animation-delay: 1.2s;
+    }
+    .mime-actor:nth-child(7) {
+        animation-delay: 1.4s;
+    }
+    .mime-actor:nth-child(8) {
+        animation-delay: 1.6s;
+    }
 
-.remove-mime-btn {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    z-index: 20;
-    background: #c0392b;
-    color: white;
-    border: 1px solid #7f0d0d;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    opacity: 0; /* Standardmäßig unsichtbar */
-    transition: opacity 0.2s ease;
-}
+    .mime-img {
+        max-height: 45vh;
+        width: auto;
+        display: block;
+        mask-image: linear-gradient(to top, transparent 0%, black 15%);
+        transition: max-height 0.4s ease;
+    }
 
-.theatre-controls {
-    position: absolute;
-    top: 20px;
-    right: 320px;
-    pointer-events: all;
-}
+    .mime-actor.is-active .mime-portrait-frame {
+        transform: scale(1.3) translateY(-40px);
+        filter: grayscale(0) brightness(1.2) contrast(1.1) blur(0);
+        z-index: 100;
+    }
 
-.theatre-btn i {
-    color: #f1c40f;
-    text-shadow: 0 0 5px rgba(241, 196, 15, 0.5);
-}
+    .mime-actor.is-active {
+        opacity: 1;
+        z-index: 100;
+    }
 
-.theatre-btn:hover i {
-    color: #fff;
-    filter: drop-shadow(0 0 8px #f1c40f);
-}
+    .mime-name {
+        font-family: "Signika", sans-serif;
+        color: white;
+        text-shadow: 0 0 8px black;
+        font-size: 1.2rem;
+        display: block;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        margin-top: 10px;
+    }
 
-.theatre-control-panel {
-    margin-top: auto;
-    padding: 8px;
-    border-top: 1px solid #444;
-    background: #111;
-}
+    .mime-actor.is-active .mime-name {
+        opacity: 1;
+    }
 
-.theatre-control-panel .stop-theatre-btn {
-    width: 100%;
-    background: #5a1a1a;
-    color: #f0c0c0;
-    border: 1px solid #7f0d0d;
-    padding: 8px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.2s;
-}
+    .hud-button {
+        border: 1px solid var(--color-border-highlight);
+        border-radius: 5px;
+        transition: all 0.2s ease-in-out;
+    }
 
-.theatre-control-panel .stop-theatre-btn:hover {
-    background: #7f2020;
-    border-color: #c0392b;
-    color: #fff;
-}
-
-.echoes-hud-btn {
-    border: 1px solid var(--color-border-highlight);
-    border-radius: 5px;
-    transition: all 0.2s ease-in-out;
-}
-
-.echoes-hud-btn:hover {
-    box-shadow: 0 0 10px var(--color-shadow-highlight);
-    color: #f0ad4e;
-    transform: scale(1.1);
-}
-
-.echoes-hud-btn i {
-    font-size: 1.2rem;
+    .hud-button:hover {
+        box-shadow: 0 0 10px var(--color-shadow-highlight);
+        color: #f0ad4e;
+        transform: scale(1.1);
+    }
 }
 
 .eoh-open-stage {

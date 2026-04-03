@@ -1,22 +1,24 @@
-<section class="theatre-stage-wrapper {{#if isOpening}}is-opening{{/if}}">
-    <div class="mimes-ensemble">
-        {{#each ensemble as |mime|}}
-            <div class="mime-actor  {{#if (eq mime.id ../activeMimeId)}}is-active{{/if}}"
-                 data-id="{{mime.id}}"
-                 data-action="setSpotlight"
-                 id="mime-{{mime.id}}"
-                 data-mime-id="{{mime.id}}"
-                 style="{{#unless mime.visible}}display: none;{{/unless}}">
+<div class="echoes-of-history" style="display: contents">
+    <section class="theatre-stage-wrapper {{#if isOpening}}is-opening{{/if}}">
+        <div class="mimes-ensemble">
+            {{#each ensemble as |mime|}}
+                <div class="mime-actor  {{#if (eq mime.id ../activeMimeId)}}is-active{{/if}}"
+                     data-id="{{mime.id}}"
+                     data-action="setSpotlight"
+                     id="mime-{{mime.id}}"
+                     data-mime-id="{{mime.id}}"
+                     style="{{#unless mime.visible}}display: none;{{/unless}}">
 
-                <div class="mime-portrait-frame">
-                    <img src="{{mime.path}}" alt="{{mime.name}}" class="mime-img" />
-                    <div class="mime-spotlight-glow"></div>
-                </div>
+                    <div class="mime-portrait-frame">
+                        <img src="{{mime.path}}" alt="{{mime.name}}" class="mime-img" />
+                        <div class="mime-spotlight-glow"></div>
+                    </div>
 
-                <div class="mime-info">
-                    <span class="mime-name">{{mime.name}}</span>
+                    <div class="mime-info">
+                        <span class="mime-name">{{mime.name}}</span>
+                    </div>
                 </div>
-            </div>
-        {{/each}}
-    </div>
-</section>
+            {{/each}}
+        </div>
+    </section>
+</div>

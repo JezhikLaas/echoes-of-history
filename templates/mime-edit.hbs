@@ -1,175 +1,177 @@
-<div class="vision-edit-container" style="padding: 12px;">
-    <input type="hidden" name="type" value="{{entry.type}}">
-    <div class="form-group" style="margin-bottom: 15px;">
-        <div class="form-fields">
-            <label>{{localize "echoes-of-history.settings.path-label"}}
-                <input type="text" value="{{entry.path}}" disabled>
-            </label>
-        </div>
-    </div>
-
-    <hr>
-
-    <div class="form-group" style="margin-bottom: 15px;">
-        <div class="form-fields">
-            <label>{{localize "echoes-of-history.settings.name-label"}}
-                <input type="text" name="name" value="{{entry.name}}" placeholder="{{entry.name}}">
-            </label>
-        </div>
-    </div>
-
-    <div class="form-group" style="margin-bottom: 15px;">
-        <div class="form-fields">
-            <label>{{localize "echoes-of-history.settings.short-name-label"}}
-                <input type="text" name="shortName" value="{{entry.shortName}}">
-            </label>
-        </div>
-    </div>
-
-    <div class="form-group" style="margin-bottom: 15px;">
-        <div class="form-fields">
-            <label>{{localize "echoes-of-history.settings.is-visible"}}
-                <input type="checkbox" name="visible" {{#if entry.visible}}checked{{/if}}>
-            </label>
-        </div>
-    </div>
-
-    <div class="form-group" style="margin-bottom: 15px;">
-        <label style="flex: 1;">{{localize "echoes-of-history.settings.folder-label"}}
-            <div class="form-fields" style="flex: 2;">
-                <select name="parentId">
-                    <option value="">{{localize "echoes-of-history.settings.folder-root"}}</option>
-                    {{#each folders}}
-                        <option value="{{this.id}}" {{#if (eq ../currentParentId this.id)}}selected{{/if}}>
-                            {{this.name}}
-                        </option>
-                    {{/each}}
-                </select>
-            </div>
-        </label>
-    </div>
-
-    <div class="section-divider">
-        <i class="fas fa-sign-in-alt" style="margin-right: 5px;"></i>
-        {{localize "echoes-of-history.settings.section-fade-in"}}
-    </div>
-
-    <div class="form-group" style="margin-bottom: 15px;">
-        <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-type-label"}}
-            <div class="form-fields" style="flex: 2;">
-                <select name="onEnterExecute.type" data-action="changeMacroType">
-                    <option value="none" {{#if isonEnterNone}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-none"}}</option>
-                    <option value="inline" {{#if isonEnterInline}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-inline"}}</option>
-                    <option value="reference" {{#if isonEnterReference}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-reference"}}</option>
-                </select>
-            </div>
-        </label>
-    </div>
-
-    {{#if isonEnterInline}}
-        <div class="form-group stacked" style="margin-bottom: 15px;">
-            <label>{{localize "echoes-of-history.settings.macro-code-label"}}
-                <textarea name="onEnterExecute.macroCode" style="font-family: monospace; min-height: 120px; width: 100%; margin-top: 5px;" placeholder="// JavaScript...">{{entry.onEnterExecute.macroCode}}</textarea>
-            </label>
-        </div>
-    {{/if}}
-
-    {{#if isonEnterReference}}
+<div class="echoes-of-history" style="display: contents">
+    <div class="vision-edit-container" style="padding: 12px;">
+        <input type="hidden" name="type" value="{{entry.type}}">
         <div class="form-group" style="margin-bottom: 15px;">
-            <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-select-label"}}
+            <div class="form-fields">
+                <label>{{localize "echoes-of-history.settings.path-label"}}
+                    <input type="text" value="{{entry.path}}" disabled>
+                </label>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-fields">
+                <label>{{localize "echoes-of-history.settings.name-label"}}
+                    <input type="text" name="name" value="{{entry.name}}" placeholder="{{entry.name}}">
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-fields">
+                <label>{{localize "echoes-of-history.settings.short-name-label"}}
+                    <input type="text" name="shortName" value="{{entry.shortName}}">
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px;">
+            <div class="form-fields">
+                <label>{{localize "echoes-of-history.settings.is-visible"}}
+                    <input type="checkbox" name="visible" {{#if entry.visible}}checked{{/if}}>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="flex: 1;">{{localize "echoes-of-history.settings.folder-label"}}
                 <div class="form-fields" style="flex: 2;">
-                    <select name="onEnterExecute.macroId">
-                        <option value="">-- {{localize "echoes-of-history.settings.macro-select-placeholder"}} --</option>
-                        {{#each allMacros}}
-                            <option value="{{this.id}}" {{#if (eq ../entry.onEnterExecute.macroId this.id)}}selected{{/if}}>{{this.name}}</option>
+                    <select name="parentId">
+                        <option value="">{{localize "echoes-of-history.settings.folder-root"}}</option>
+                        {{#each folders}}
+                            <option value="{{this.id}}" {{#if (eq ../currentParentId this.id)}}selected{{/if}}>
+                                {{this.name}}
+                            </option>
                         {{/each}}
                     </select>
                 </div>
             </label>
         </div>
 
-        <div class="form-group stacked" style="margin-bottom: 15px;">
-            <label>{{localize "echoes-of-history.settings.macro-args-label"}}
-                <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
-                    {{#each onEnterMacroArgs}}
-                        <div class="flexrow" style="gap: 5px;">
-                            <input type="text" name="onEnterExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key" style="flex: 1;">
-                            <input type="text" name="onEnterExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value" style="flex: 1;">
-                            <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeInArg" data-index="{{@index}}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    {{/each}}
-                    <button type="button" data-action="addInArg" style="margin-top: 5px;">
-                        <i class="fas fa-plus"></i> {{localize "echoes-of-history.settings.add-arg-button"}}
-                    </button>
-                </div>
-            </label>
+        <div class="section-divider">
+            <i class="fas fa-sign-in-alt" style="margin-right: 5px;"></i>
+            {{localize "echoes-of-history.settings.section-fade-in"}}
         </div>
-    {{/if}}
 
-    <div class="section-divider">
-        <i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>
-        {{localize "echoes-of-history.settings.section-fade-out"}}
-    </div>
-
-    <div class="form-group" style="margin-bottom: 15px;">
-        <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-type-label"}}
-            <div class="form-fields" style="flex: 2;">
-                <select name="onExitExecute.type" data-action="changeMacroType">
-                    <option value="none" {{#if isonExitNone}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-none"}}</option>
-                    <option value="inline" {{#if isonExitInline}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-inline"}}</option>
-                    <option value="reference" {{#if isonExitReference}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-reference"}}</option>
-                </select>
-            </div>
-        </label>
-    </div>
-
-    {{#if isonExitInline}}
-        <div class="form-group stacked" style="margin-bottom: 15px;">
-            <label>{{localize "echoes-of-history.settings.macro-code-label"}}
-                <textarea name="onExitExecute.macroCode" style="font-family: monospace; min-height: 120px; width: 100%; margin-top: 5px;" placeholder="// JavaScript...">{{entry.onExitExecute.macroCode}}</textarea>
-            </label>
-        </div>
-    {{/if}}
-
-    {{#if isonExitReference}}
         <div class="form-group" style="margin-bottom: 15px;">
-            <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-select-label"}}
+            <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-type-label"}}
                 <div class="form-fields" style="flex: 2;">
-                    <select name="onExitExecute.macroId">
-                        <option value="">-- {{localize "echoes-of-history.settings.macro-select-placeholder"}} --</option>
-                        {{#each allMacros}}
-                            <option value="{{this.id}}" {{#if (eq ../entry.onExitExecute.macroId this.id)}}selected{{/if}}>{{this.name}}</option>
-                        {{/each}}
+                    <select name="onEnterExecute.type" data-action="changeMacroType">
+                        <option value="none" {{#if isonEnterNone}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-none"}}</option>
+                        <option value="inline" {{#if isonEnterInline}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-inline"}}</option>
+                        <option value="reference" {{#if isonEnterReference}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-reference"}}</option>
                     </select>
                 </div>
             </label>
         </div>
 
-        <div class="form-group stacked" style="margin-bottom: 15px;">
-            <label>{{localize "echoes-of-history.settings.macro-args-label"}}
-                <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
-                    {{#each onExitMacroArgs}}
-                        <div class="flexrow" style="gap: 5px;">
-                            <input type="text" name="onExitExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key" style="flex: 1;">
-                            <input type="text" name="onExitExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value" style="flex: 1;">
-                            <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeOutArg" data-index="{{@index}}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    {{/each}}
-                    <button type="button" data-action="addOutArg" style="margin-top: 5px;">
-                        <i class="fas fa-plus"></i> {{localize "echoes-of-history.settings.add-arg-button"}}
-                    </button>
+        {{#if isonEnterInline}}
+            <div class="form-group stacked" style="margin-bottom: 15px;">
+                <label>{{localize "echoes-of-history.settings.macro-code-label"}}
+                    <textarea name="onEnterExecute.macroCode" style="font-family: monospace; min-height: 120px; width: 100%; margin-top: 5px;" placeholder="// JavaScript...">{{entry.onEnterExecute.macroCode}}</textarea>
+                </label>
+            </div>
+        {{/if}}
+
+        {{#if isonEnterReference}}
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-select-label"}}
+                    <div class="form-fields" style="flex: 2;">
+                        <select name="onEnterExecute.macroId">
+                            <option value="">-- {{localize "echoes-of-history.settings.macro-select-placeholder"}} --</option>
+                            {{#each allMacros}}
+                                <option value="{{this.id}}" {{#if (eq ../entry.onEnterExecute.macroId this.id)}}selected{{/if}}>{{this.name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </label>
+            </div>
+
+            <div class="form-group stacked" style="margin-bottom: 15px;">
+                <label>{{localize "echoes-of-history.settings.macro-args-label"}}
+                    <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
+                        {{#each onEnterMacroArgs}}
+                            <div class="flexrow" style="gap: 5px;">
+                                <input type="text" name="onEnterExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key" style="flex: 1;">
+                                <input type="text" name="onEnterExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value" style="flex: 1;">
+                                <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeInArg" data-index="{{@index}}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        {{/each}}
+                        <button type="button" data-action="addInArg" style="margin-top: 5px;">
+                            <i class="fas fa-plus"></i> {{localize "echoes-of-history.settings.add-arg-button"}}
+                        </button>
+                    </div>
+                </label>
+            </div>
+        {{/if}}
+
+        <div class="section-divider">
+            <i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i>
+            {{localize "echoes-of-history.settings.section-fade-out"}}
+        </div>
+
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-type-label"}}
+                <div class="form-fields" style="flex: 2;">
+                    <select name="onExitExecute.type" data-action="changeMacroType">
+                        <option value="none" {{#if isonExitNone}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-none"}}</option>
+                        <option value="inline" {{#if isonExitInline}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-inline"}}</option>
+                        <option value="reference" {{#if isonExitReference}}selected{{/if}}>{{localize "echoes-of-history.settings.macro-reference"}}</option>
+                    </select>
                 </div>
             </label>
         </div>
-    {{/if}}
 
-    <footer class="form-footer" style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #7774;">
-        <button type="submit" data-action="save">
-            <i class="fas fa-save"></i> {{localize "echoes-of-history.settings.save-button"}}
-        </button>
-    </footer>
+        {{#if isonExitInline}}
+            <div class="form-group stacked" style="margin-bottom: 15px;">
+                <label>{{localize "echoes-of-history.settings.macro-code-label"}}
+                    <textarea name="onExitExecute.macroCode" style="font-family: monospace; min-height: 120px; width: 100%; margin-top: 5px;" placeholder="// JavaScript...">{{entry.onExitExecute.macroCode}}</textarea>
+                </label>
+            </div>
+        {{/if}}
+
+        {{#if isonExitReference}}
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="flex: 1;">{{localize "echoes-of-history.settings.macro-select-label"}}
+                    <div class="form-fields" style="flex: 2;">
+                        <select name="onExitExecute.macroId">
+                            <option value="">-- {{localize "echoes-of-history.settings.macro-select-placeholder"}} --</option>
+                            {{#each allMacros}}
+                                <option value="{{this.id}}" {{#if (eq ../entry.onExitExecute.macroId this.id)}}selected{{/if}}>{{this.name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </label>
+            </div>
+
+            <div class="form-group stacked" style="margin-bottom: 15px;">
+                <label>{{localize "echoes-of-history.settings.macro-args-label"}}
+                    <div class="parameter-list" style="display: flex; flex-direction: column; gap: 5px; margin-top: 5px;">
+                        {{#each onExitMacroArgs}}
+                            <div class="flexrow" style="gap: 5px;">
+                                <input type="text" name="onExitExecute.arguments.{{@index}}.key" value="{{this.key}}" placeholder="Key" style="flex: 1;">
+                                <input type="text" name="onExitExecute.arguments.{{@index}}.value" value="{{this.value}}" placeholder="Value" style="flex: 1;">
+                                <button type="button" class="icon-button danger" style="flex: 0 0 28px; height: 26px;" data-action="removeOutArg" data-index="{{@index}}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        {{/each}}
+                        <button type="button" data-action="addOutArg" style="margin-top: 5px;">
+                            <i class="fas fa-plus"></i> {{localize "echoes-of-history.settings.add-arg-button"}}
+                        </button>
+                    </div>
+                </label>
+            </div>
+        {{/if}}
+
+        <footer class="form-footer" style="margin-top: 15px; padding-top: 10px; border-top: 1px solid #7774;">
+            <button type="submit" data-action="save">
+                <i class="fas fa-save"></i> {{localize "echoes-of-history.settings.save-button"}}
+            </button>
+        </footer>
+    </div>
 </div>

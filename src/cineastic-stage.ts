@@ -20,8 +20,10 @@ export class CineasticStageManager {
         Hooks.on("renderTokenHUD", (app: any, html: HTMLElement, data: any) => {
             const $html = $(html);
             const button = $(`
-        <div class="control-icon echoes-hud-btn" title="${game.i18n?.localize('echoes-of-history.hud.add-to-mime')}">
-            <i class="fas fa-theater-masks"></i>
+        <div class="echoes-of-history" style="display: contents;">
+            <div class="control-icon hud-button" title="${game.i18n?.localize('echoes-of-history.hud.add-to-mime')}">
+                <i class="fas fa-theater-masks"></i>
+            </div>
         </div>
     `);
 

@@ -82,6 +82,18 @@ export function registerSettings(): void {
         type: String,
         default: ""
     });
+    settings.register(MODULE_ID, "activeStageState", {
+        name: "Active theatre stage state",
+        scope: "world",
+        config: false,
+        type: Object,
+        default: null
+    });
+}
+
+export interface StageState {
+    ensemble: MimeEntry[];
+    activeMimeId: string | null;
 }
 
 export interface MacroEntryNone {

@@ -1,6 +1,6 @@
 import { MacroManager } from "../macro-manager";
 import { MODULE_ID } from "../constants";
-import { MimeEntry } from "../settings";
+import { MimeEntry, StageState } from "../settings";
 import {writeWarn} from "../utils/logging";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -50,6 +50,7 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
         }
 
         if (game.user?.isGM) {
+            this.persistState();
             game.socket?.emit(`module.${MODULE_ID}`, {
                 action: "updateMimeVisibility",
                 mimeId: mimeId,
@@ -84,6 +85,7 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
 
         const newEnsemble = currentEnsemble.filter(m => m.id !== mimeId);
         (this.constructor as typeof TheatreStage).ensemble = newEnsemble;
+        TheatreStage.persistState();
 
         if (newEnsemble.length === 0) {
             await this.close();
@@ -100,6 +102,7 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
         this.ensemble = nscEntries.slice(0, 10);
         this.activeMimeId = null;
         this.isOpening = true;
+        this.persistState();
         this.openCurtain(broadcast);
     }
 
@@ -111,6 +114,7 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
         }
 
         this.ensemble = [...this.ensemble, ...nscEntries];
+        this.persistState();
         this.openCurtain(broadcast);
     }
 
@@ -132,8 +136,52 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     }
 
+    /**
+     * Restores the stage after a page reload (F5) from the persisted world state,
+     * so the stage stays visible until the GM closes it.
+     */
+    public static restoreFromSettings() {
+        const settings = game.settings as any;
+        const state = settings.get(MODULE_ID, "activeStageState") as StageState | null;
+        if (!state?.ensemble?.length) {
+            return;
+        }
+
+        this.ensemble = state.ensemble;
+        this.activeMimeId = state.activeMimeId ?? null;
+        this.isOpening = false;
+        this.openCurtain(false);
+    }
+
+    /**
+     * Clears the local stage state without persisting or broadcasting (used when the GM closes the stage).
+     */
+    public static resetLocally() {
+        this.ensemble = [];
+        this.activeMimeId = null;
+    }
+
+    /**
+     * Stores the current stage state in a world setting. Only the GM may write world settings.
+     */
+    private static persistState() {
+        if (!game.user?.isGM) {
+            return;
+        }
+
+        const state: StageState | null = this.ensemble.length > 0
+            ? { ensemble: this.ensemble, activeMimeId: this.activeMimeId }
+            : null;
+
+        const settings = game.settings as any;
+        settings.set(MODULE_ID, "activeStageState", state)
+            .catch((err: unknown) => writeWarn("Failed to persist stage state", err));
+    }
+
     public static async closeConversation(instance: TheatreStage) {
         TheatreStage.ensemble = [];
+        TheatreStage.activeMimeId = null;
+        TheatreStage.persistState();
         if (game.user?.isGM) {
             game.socket?.emit(`module.${MODULE_ID}`, {
                 action: "closeStage"
@@ -156,6 +204,8 @@ export class TheatreStage extends HandlebarsApplicationMixin(ApplicationV2) {
         if (!game.user?.isGM) {
             return;
         }
+
+        TheatreStage.persistState();
 
         if (oldActive) {
             const oldMime = TheatreStage.ensemble.find(m => m.id === oldActive);

@@ -42,6 +42,7 @@ Bring your NPCs and heroes to the spotlight with a dedicated ensemble overlay.
 - **Dynamic Spotlight:** Focus on the active speaker with a "noble" glow and scaling effect.
 - **Visibility Toggle:** Prepare actors in the background and reveal them only when the drama peaks.
 - **Drag & Drop Recruitment:** Effortlessly pull characters from the *World & Campaign Builder* directly onto the stage.
+- **Persistence (F5-Safe):** The stage (ensemble, spotlight and visibility) is restored after a refresh until the GM closes it.
 - **Director's Desk:** A dedicated control panel in your sidebar to manage the show and close the curtain.
 - **Open Stage:** Quickly send a Mime to the stage via the Token HUD. Perfect for when the dying boss needs those crucial last words...
 

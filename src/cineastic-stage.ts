@@ -4,11 +4,14 @@ import { MimeManager } from "./mime-manager";
 
 export class CineasticStageManager {
     public static initialize() {
+        TheatreStage.restoreFromSettings();
+
         SocketDispatcher.register("openStage", async (data: any) => {
             TheatreStage.startConversation(data.ensemble, false);
         });
         SocketDispatcher.register("closeStage", async () => {
-            (ui as any).theatreStage?.close();
+            TheatreStage.resetLocally();
+            await (ui as any).theatreStage?.close();
         });
         SocketDispatcher.register("activateMime", async (data: any) => {
             await (ui as any).theatreStage.activateMime(data.active, data.inactive || null);
